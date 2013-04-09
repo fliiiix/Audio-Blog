@@ -1,0 +1,13 @@
+<% @posts.each do |post| %>
+<div class="frame">
+		<div class="titel">
+			<b><%= post.title %></b>
+		</div>
+		<p>
+			<%= post.description %>
+		</p>
+		<div>
+			file name <%= post.downloadFileName %>
+		</div>
+ </div>
+ <% end %>

@@ -1,0 +1,19 @@
+<style type="text/css">
+	form {width: 350px; margin: auto;}
+	form label {float: left; margin-right: 15px;}
+	#submit {float: right; margin-top: 15px;}
+	form textarea {clear: both;}
+</style>
+<div><%= @meldung %></div>
+<form action="/add/music" method="post" enctype="multipart/form-data">
+	<h1>Add a Song</h1>
+	<label>Titel:</label><input type="text" name="title" value="ransdasfdsf"><br>
+	<label>Description</label><br>
+	<textarea name="description"></textarea>
+	<label>Sample</label>
+	<input name="soundSample" type="file"><br>
+	<label>Sound File</label>
+	<input name="soundFile" type="file"><br><br>
+	<label>Preis:</label><input type="text" name="preis" value="500"> <input type="checkbox" name="freeTrack" value="Free Track"><br>
+	<input type="submit" value="Speichern" id="submit" class="btn btn-primary">
+</form>
