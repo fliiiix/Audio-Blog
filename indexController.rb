@@ -1,13 +1,38 @@
 # encoding: UTF-8
 require "sinatra"
 require "soundcloud"
+require "yaml"
 require_relative "model.rb"
 
-@BlogTitel = "Music Blog"
-@clinentId = ""
-@clientSecret = ""
+class AppConfig
+	def initialize
+		begin
+			conf = YAML.load_file(File.expand_path("config.yaml", File.dirname(__FILE__)))
+			puts conf.inspect
+			# @SoundCloudClientIdLocal = conf["SoundCloudClientId"]
+			# @SoundCloudClientSecretLocal = conf["SoundCloudClientSecret"]
+			@BlogTitelLocal = conf["BlogTitel"]
+			puts "Titel " + @BlogTitel
+		rescue Exception => e
+			puts "Well fuck, no config named config.yaml or something else " + e.to_s
+		end
+	end
+
+	# def SoundCloudClientId
+	# 	@SoundCloudClientIdLocal
+	# end
+
+	# def SoundCloudClientSecret
+	# 	@SoundCloudClientSecretLocal
+	# end
+
+	def BlogTitel
+		@BlogTitelLocal.to_s
+	end
+end
 
 configure :development do
+	AppConfig.new
 	MongoMapper.database = 'music'
 	set :show_exceptions, true
 end
@@ -23,8 +48,8 @@ end
 
 get "/auth" do
 	# create client object with app credentials
-	client = Soundcloud.new(:client_id => @clinentId,
-							:client_secret => @clientSecret,
+	client = Soundcloud.new(:client_id => AppConfig::SoundCloudClientId,
+							:client_secret => AppConfig::SoundCloudClientSecret,
 							:redirect_uri => 'http://localhost:9393/authPoint')
 
 	# redirect user to authorize URL
@@ -34,13 +59,24 @@ end
 
 get "/authPoint" do
 	# create client object with app credentials
-	client = Soundcloud.new(:client_id => @clinentId,
-							:client_secret => @clientSecret,
+	client = Soundcloud.new(:client_id => AppConfig::SoundCloudClientId,
+							:client_secret => AppConfig::SoundCloudClientSecret,
 							:redirect_uri => 'http://localhost:9393/authPoint')
 	# exchange authorization code for access token
-	code = params[:code]
-	access_token = client.exchange_token(:code => code)
-	token = SoundCloudToken.new(:access_token => access_token, :expires_in => params[:expires_in])
+	auth = client.exchange_token(:code => params[:code])
+	
+	if !client#expired?
+		x = "true"
+	else
+		x = "false"
+	end
+
+	puts "expired: " + x
+	puts "user: " + client.get('/me').username
+
+	token = SoundCloudToken.new(:access_token => auth[:access_token], 
+								:expires_in => auth[:expires_in], 
+								:refresh_token => auth[:refresh_token])
 	token.save
 	redirect "/add/music"
 end

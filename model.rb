@@ -5,19 +5,20 @@ require "soundcloud"
 class SoundCloudToken
 	include MongoMapper::Document
 
-	key :access_token, String, :require => true
-	key :expires_in, String, :require => true
+	key :access_token,  String, :require => true
+	key :expires_in,    String, :require => true
+	key :refresh_token, String, :require => true
 end
 
 class MusicPost
 	include MongoMapper::Document
 
-	key :title, String, :require => true, :length => 5..25
-	key :description, String, :length => 0..800
-	key :preis, Float, :require => true, :numeric => true
-	key :downloadFileName, String, :require => true
-	key :soundCloudUrl, String, :require => true
-	key :SoundCloudId, Float, :require => true, :numeric => true
+	key :title,				String, :require => true, :length => 5..25
+	key :description, 		String, :length => 0..800
+	key :preis, 			Float, :require => true, :numeric => true
+	key :downloadFileName, 	String, :require => true
+	key :soundCloudUrl, 	String, :require => true
+	key :SoundCloudId, 		Float, :require => true, :numeric => true
 	timestamps!
 
 	before_validation :uploadFile
