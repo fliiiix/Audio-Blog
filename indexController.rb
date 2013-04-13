@@ -4,41 +4,14 @@ require "soundcloud"
 require "yaml"
 require_relative "model.rb"
 
-class AppConfig
-	def initialize
-		begin
-			conf = YAML.load_file(File.expand_path("config.yaml", File.dirname(__FILE__)))
-			puts conf.inspect
-			# @SoundCloudClientIdLocal = conf["SoundCloudClientId"]
-			# @SoundCloudClientSecretLocal = conf["SoundCloudClientSecret"]
-			@BlogTitelLocal = conf["BlogTitel"]
-			puts "Titel " + @BlogTitel
-		rescue Exception => e
-			puts "Well fuck, no config named config.yaml or something else " + e.to_s
-		end
-	end
-
-	# def SoundCloudClientId
-	# 	@SoundCloudClientIdLocal
-	# end
-
-	# def SoundCloudClientSecret
-	# 	@SoundCloudClientSecretLocal
-	# end
-
-	def BlogTitel
-		@BlogTitelLocal.to_s
-	end
-end
-
 configure :development do
-	AppConfig.new
+	AppConfig = YAML.load_file(File.expand_path("config.yaml", File.dirname(__FILE__)))["development"]
 	MongoMapper.database = 'music'
 	set :show_exceptions, true
 end
 
 configure :production do
-
+	AppConfig = YAML.load_file(File.expand_path("config.yaml", File.dirname(__FILE__)))["production"]
 end
 
 get "/" do
@@ -48,8 +21,8 @@ end
 
 get "/auth" do
 	# create client object with app credentials
-	client = Soundcloud.new(:client_id => AppConfig::SoundCloudClientId,
-							:client_secret => AppConfig::SoundCloudClientSecret,
+	client = Soundcloud.new(:client_id => AppConfig["SoundCloudClientId"],
+							:client_secret => AppConfig["SoundCloudClientSecret"],
 							:redirect_uri => 'http://localhost:9393/authPoint')
 
 	# redirect user to authorize URL
@@ -59,8 +32,8 @@ end
 
 get "/authPoint" do
 	# create client object with app credentials
-	client = Soundcloud.new(:client_id => AppConfig::SoundCloudClientId,
-							:client_secret => AppConfig::SoundCloudClientSecret,
+	client = Soundcloud.new(:client_id => AppConfig["SoundCloudClientId"],
+							:client_secret => AppConfig["SoundCloudClientSecret"],
 							:redirect_uri => 'http://localhost:9393/authPoint')
 	# exchange authorization code for access token
 	auth = client.exchange_token(:code => params[:code])

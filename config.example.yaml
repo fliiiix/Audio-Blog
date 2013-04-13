@@ -1,3 +1,8 @@
-SoundCloudClientId: -
-SoundCloudClientSecret: -
-BlogTitel: Music Blog
+development:
+  SoundCloudClientId: xxx
+  SoundCloudClientSecret: xxx
+  BlogTitel: Music Blog
+production:
+  SoundCloudClientId: xxx
+  SoundCloudClientSecret: xxx
+  BlogTitel: Music Blog
