@@ -26,15 +26,10 @@ class MusicPost
 	private
 	def uploadToSoundCloud
 		lastToken = SoundCloudToken.last()
-		x = "no"
 		if lastToken != nil
-			puts "toooken: " + lastToken.access_token
 			client = Soundcloud.new(:access_token => lastToken.access_token)
 			if !client#expired?
 				#need to refresh the token!
-				x = "i refresh teh token"
-				puts "sound cloood: " + AppConfig["SoundCloudClientId"]
-				puts "last tooken " + lastToken.refresh_token
 				client = Soundcloud.new(:client_id => AppConfig["SoundCloudClientId"],
 										:client_secret => AppConfig["SoundCloudClientSecret"],
 										:refresh_token => lastToken.refresh_token)
@@ -43,16 +38,13 @@ class MusicPost
 											   :refresh_token => client.refresh_token)
 				newToken.save
 			end
-
-			puts "expired: " + x 
-			puts "user: " + client.get('/me').username
-			#client = Soundcloud.new(:access_token => SoundCloudToken.first().access_token)
-			# track = client.post('/tracks', :track => {
-			#   :title => title,
-			#   :asset_data => File.new(File.path(soundCloudUrl), 'rb')
-			# })
-			# set[:soundCloudUrl] = track.permalink_url
-			# set[:SoundCloudId] = track.id
+			puts File.path(soundCloudUrl)
+			track = client.post('/tracks', :track => {
+			  :title => title,
+			  :asset_data => File.new(File.path(soundCloudUrl), 'rb')
+			})
+			set[:soundCloudUrl] = track.permalink_url
+			set[:SoundCloudId] = track.id
 		else
 			errors.add(:soundCloudUrl, "No Soundcloud token!")
 		end
