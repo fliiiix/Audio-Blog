@@ -6,7 +6,6 @@ class SoundCloudToken
 	include MongoMapper::Document
 
 	key :access_token,  String, :require => true
-	key :expires_in,    String, :require => true
 	key :refresh_token, String, :require => true
 end
 
@@ -26,8 +25,27 @@ class MusicPost
 
 	private
 	def uploadToSoundCloud
-		if SoundCloudToken.last() != nil
-			puts SoundCloudToken.last().access_token
+		lastToken = SoundCloudToken.last()
+		x = "no"
+		if lastToken != nil
+			puts "toooken: " + lastToken.access_token
+			client = Soundcloud.new(:access_token => lastToken.access_token)
+			if !client#expired?
+				#need to refresh the token!
+				x = "i refresh teh token"
+				puts "sound cloood: " + AppConfig["SoundCloudClientId"]
+				puts "last tooken " + lastToken.refresh_token
+				client = Soundcloud.new(:client_id => AppConfig["SoundCloudClientId"],
+										:client_secret => AppConfig["SoundCloudClientSecret"],
+										:refresh_token => lastToken.refresh_token)
+
+				newToken = SoundCloudToken.new(:access_token => client.access_token, 
+											   :refresh_token => client.refresh_token)
+				newToken.save
+			end
+
+			puts "expired: " + x 
+			puts "user: " + client.get('/me').username
 			#client = Soundcloud.new(:access_token => SoundCloudToken.first().access_token)
 			# track = client.post('/tracks', :track => {
 			#   :title => title,
@@ -35,7 +53,6 @@ class MusicPost
 			# })
 			# set[:soundCloudUrl] = track.permalink_url
 			# set[:SoundCloudId] = track.id
-			#puts client.get('/me').username
 		else
 			errors.add(:soundCloudUrl, "No Soundcloud token!")
 		end

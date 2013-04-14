@@ -47,8 +47,11 @@ get "/authPoint" do
 	puts "expired: " + x
 	puts "user: " + client.get('/me').username
 
+	puts "access_token hash: " + auth[:access_token]
+	puts "expires_in hash: " + auth[:expires_in].to_s
+	puts "refresh_token hash: " + auth[:refresh_token]
+
 	token = SoundCloudToken.new(:access_token => auth[:access_token], 
-								:expires_in => auth[:expires_in], 
 								:refresh_token => auth[:refresh_token])
 	token.save
 	redirect "/add/music"
