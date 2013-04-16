@@ -38,10 +38,10 @@ class MusicPost
 											   :refresh_token => client.refresh_token)
 				newToken.save
 			end
-			puts File.path(soundCloudUrl)
+			puts soundCloudUrl
 			track = client.post('/tracks', :track => {
 			  :title => title,
-			  :asset_data => File.new(File.path(soundCloudUrl), 'rb')
+			  :asset_data => File.new(soundCloudUrl, 'rb')
 			})
 			set[:soundCloudUrl] = track.permalink_url
 			set[:SoundCloudId] = track.id
