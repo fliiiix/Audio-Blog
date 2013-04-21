@@ -21,7 +21,7 @@
       <div>
         <%= Maruku.new(post.text).to_html.byteslice(0, 1000)  %>
       </div>
-      <a href="/<%= post.urls_id %>">read more</a>
+      <a href="/<%= post.url.nice %>">read more</a>
     </div>
   <% end %>
 <% end %>

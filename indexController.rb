@@ -15,15 +15,21 @@ configure :production do
   AppConfig = YAML.load_file(File.expand_path("config.yaml", File.dirname(__FILE__)))["production"]
 end
 
-get "/:id" do |id|
-  @text = BlogPost.find(id)
+get "/id/:id" do |id|
+  @text = Post.find(id)
   @music = MusicPost.find(id)
+  erb :index
+end
+
+get "/:name" do |name|
+  @text = Url.first(:nice => name).post
+  puts @text.text
   erb :index
 end
 
 get "/" do
   @posts = MusicPost.all
-  @blog = BlogPost.all
+  @blog = Post.all
   erb :index
 end
 
@@ -37,15 +43,9 @@ get "/add/:type" do |type|
 end
 
 post "/add/text" do
-  post = BlogPost.new(:title => params[:title], 
+  post = Post.new(:title => params[:title], 
                       :text => params[:mdtext], 
-                      :urls => NiceUrl.new(:niceUrl => params[:title]))
-  if post.valid?
-    puts "Yeah its valid"
-  else
-    puts post.errors.first
-  end
-
+                      :urls => [Url.new(:nice => params[:title])])
   if post.save
     @meldung = "successfully saved"
   else
@@ -57,11 +57,11 @@ end
 post "/add/music" do
   if params[:soundFile] != nil && params[:soundSample] != nil
     post = MusicPost.new(:title => params[:title], 
-             :description => params[:description], 
+             :text => params[:description], 
              :preis => params[:preis], 
              :downloadFileName => params[:soundFile][:tempfile].to_path + "," + params[:soundFile][:filename].to_s,
              :soundCloudUrl => params[:soundSample][:tempfile].to_path,
-             :urls => NiceUrl.new(:url => params[:title]))
+             :urls => [Url.new(:nice => params[:title])])
     if post.save
       @meldung = "successfully saved"
     else

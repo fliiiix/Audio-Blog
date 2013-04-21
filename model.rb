@@ -10,24 +10,21 @@ class SoundCloudToken
   key :refresh_token, String, :require => true
 end
 
-class BlogPost
+class Post
   include MongoMapper::Document
 
   key :titel, String, :require => true, :minimum => 4, :maximum => 40
   key :text,  String, :require => true
-  many :niceUrl, :as => :niceUrls
+  one :url
 end
 
-class MusicPost
+class MusicPost < Post
   include MongoMapper::Document
 
-  key :title,             String, :require => true, :minimum => 4, :maximum => 40
-  key :description,       String, :minimum => 4, :maximum => 10000
   key :preis,             Float,  :require => true, :numeric => true
   key :downloadFileName,  String, :require => true
   key :soundCloudUrl,     String, :require => true
   key :SoundCloudId,      Float,  :require => true, :numeric => true
-  many :niceUrl, :as => :niceUrls
 
   before_validation :uploadFile
   before_validation :uploadToSoundCloud
@@ -72,33 +69,26 @@ class MusicPost
   end
 end
 
-class NiceUrl
+class Url
   include MongoMapper::Document
 
-  key :niceUrl, String, :require => true
+  key :nice, String, :require => true
 
-  belongs_to :niceUrls, :polymorphic => true
+  belongs_to :post
   before_validation :makeUrlNice
 
   private
   def makeUrlNice
-    if niceUrl == nil
+    if nice == nil
       return nil
     end
-    
-    puts sanitize("hdsfsdf hdfsdhfkhsdfsd  f hdsfjsdf") + "..."
-    url = sanitize(niceUrl)
-
-
-    puts sanitize(niceUrl) + ".."
-    puts url + ".."
-
+    url = sanitize(nice)
     counter = 0
     begin
       newUrl = url + (counter != 0 ? "-#{counter}" : "")
       counter += 1
-    end while NiceUrl.first(:url => newUrl) != nil
-    self[:niceUrl] = newUrl
+    end while Url.first(:nice => newUrl) != nil
+    self[:nice] = newUrl
   end
 
   def sanitize(string)
