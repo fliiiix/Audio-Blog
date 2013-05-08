@@ -4,16 +4,8 @@ require "soundcloud"
 require "yaml"
 require "maruku"
 require_relative "model.rb"
-
-configure :development do
-  AppConfig = YAML.load_file(File.expand_path("config.yaml", File.dirname(__FILE__)))["development"]
-  MongoMapper.database = 'music'
-  set :show_exceptions, true
-end
-
-configure :production do
-  AppConfig = YAML.load_file(File.expand_path("config.yaml", File.dirname(__FILE__)))["production"]
-end
+require_relative "config.rb"
+require_relative "userController.rb"
 
 get "/id/:id" do |id|
   @text = Post.find(id)
@@ -23,13 +15,11 @@ end
 
 get "/:name" do |name|
   @text = Url.first(:nice => name).post
-  puts @text.text
   erb :index
 end
 
 get "/" do
-  @posts = MusicPost.all
-  @blog = Post.all
+  @posts = MusicPost.all + Post.all
   erb :index
 end
 
@@ -44,8 +34,8 @@ end
 
 post "/add/text" do
   post = Post.new(:title => params[:title], 
-                      :text => params[:mdtext], 
-                      :urls => [Url.new(:nice => params[:title])])
+                  :text => params[:mdtext], 
+                  :url => Url.new(:nice => params[:title]))
   if post.save
     @meldung = "successfully saved"
   else
@@ -57,11 +47,11 @@ end
 post "/add/music" do
   if params[:soundFile] != nil && params[:soundSample] != nil
     post = MusicPost.new(:title => params[:title], 
-             :text => params[:description], 
-             :preis => params[:preis], 
-             :downloadFileName => params[:soundFile][:tempfile].to_path + "," + params[:soundFile][:filename].to_s,
-             :soundCloudUrl => params[:soundSample][:tempfile].to_path,
-             :urls => [Url.new(:nice => params[:title])])
+                         :text => params[:description], 
+                         :preis => params[:preis], 
+                         :downloadFileName => params[:soundFile][:tempfile].to_path + "," + params[:soundFile][:filename].to_s,
+                         :soundCloudUrl => params[:soundSample][:tempfile].to_path,
+                         :url => Url.new(:nice => params[:title]))
     if post.save
       @meldung = "successfully saved"
     else

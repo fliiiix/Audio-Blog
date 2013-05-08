@@ -40,6 +40,11 @@
               <li><a href="#about">About</a></li>
               <li><a href="#contact">Contact</a></li>
             </ul>
+
+              <ul class="nav pull-right">
+                <%=  erb :login if session["isLogdIn"] == false || session["isLogdIn"] == nil %>
+                <%= "<li>Hi " + AppConfig["User"] + "</li>" if session["isLogdIn"]%>
+             </ul>
           </div><!--/.nav-collapse -->
         </div>
       </div>
