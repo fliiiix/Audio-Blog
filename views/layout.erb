@@ -36,14 +36,13 @@
           <a class="brand" href="/"><%= AppConfig["BlogTitel"] %></a>
           <div class="nav-collapse collapse">
             <ul class="nav">
-              <li class="active"><a href="#">Home</a></li>
-              <li><a href="#about">About</a></li>
+              <li class="active"><a href="/">Home</a></li>
+              <li><a href="/about">About</a></li>
               <li><a href="#contact">Contact</a></li>
             </ul>
 
               <ul class="nav pull-right">
-                <%=  erb :login if session["isLogdIn"] == false || session["isLogdIn"] == nil %>
-                <%= "<li>Hi " + AppConfig["User"] + "</li>" if session["isLogdIn"]%>
+                <%= admin? ? erb(:adminNavigation) : erb(:login) %>
              </ul>
           </div><!--/.nav-collapse -->
         </div>

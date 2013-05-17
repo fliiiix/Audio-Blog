@@ -1,36 +1,57 @@
-<% if @posts != nil%>
+<% if @posts %>
   <% @posts.each do |post| %>
-   <div class="frame">
-      <div class="titel">
-        <b><%= post.title %></b>
-      </div>
-      <p>
-        <%= post.description %>
-      </p>
-      <div>
-        file name <%= post.downloadFileName %>
-      </div>
-    </div>
-  <% end %>
-<% end %>
-
-<% if @blog != nil%>
-  <% @blog.each do |post| %>
     <div style="float:none; background-color: white; padding: 20px; margin-bottom:35px; margin-left:auto; margin-right:auto;" class="span8">
-      <h1><%= post.title %></h1>
+        <h1><%= post.title %></h1>
       <div>
-        <%= Maruku.new(post.text).to_html.byteslice(0, 1000)  %>
+        <%= Maruku.new(post.text).to_html.byteslice(0, 1000) %>
       </div>
       <a href="/<%= post.url.nice %>">read more</a>
     </div>
   <% end %>
 <% end %>
 
-<% if @text != nil%>
+<% if @post %>
+   <div style="float:none; background-color: white; padding: 20px; margin-bottom:35px; margin-left:auto; margin-right:auto;" class="span8">
+        <h1><%= @post.title %></h1>
+      <div>
+        <%= Maruku.new(@post.text).to_html %>
+      </div>
+    </div>
+<% end %>
+
+<!-- <%# if @posts != nil%>
+  <%# @posts.each do |post| %>
+   <div class="frame">
+      <div class="title >
+        <b><%#= post.title %></b>
+      </div>
+      <p>
+        <%#= post.description %>
+      </p>
+      <div>
+        file name <%#= post.downloadFileName %>
+      </div>
+    </div>
+  <%# end %>
+<%# end %>
+
+<%# if @blog != nil%>
+  <%# @blog.each do |post| %>
+    <div style="float:none; background-color: white; padding: 20px; margin-bottom:35px; margin-left:auto; margin-right:auto;" class="span8">
+      <h1><%#= post.title %></h1>
+      <div>
+        <%#= Maruku.new(post.text).to_html.byteslice(0, 1000)  %>
+      </div>
+      <a href="/<%#= post.url.nice %>">read more</a>
+    </div>
+  <%# end %>
+<%# end %>
+
+<%# if @text != nil%>
   <div style="float:none; background-color: white; padding: 20px; margin-bottom:35px; margin-left:auto; margin-right:auto;" class="span8">
-    <h1><%= @text.title %></h1>
+    <h1><%#= @text.title %></h1>
     <div>
-      <%= Maruku.new(@text.text).to_html %>
+      <%#= Maruku.new(@text.text).to_html %>
     </div>
   </div>
-<% end %>
+<%# end %>-->
