@@ -1,0 +1,5 @@
+<div><%= @meldung %></div>
+<form action="/edit/about" method="post" >
+  <textarea name="mdtext" style="height:360px;" class="span12"><%= @about.text if @about%></textarea>
+  <input type="submit" value="Speichern" id="submit" class="btn btn-primary" style="float:right;">
+</form>
