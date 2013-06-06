@@ -9,7 +9,11 @@ require_relative "error.rb"
 require_relative "login.rb"
 
 get "/" do
-  @posts = Post.all(:order => :created_at.desc) #MusicPost.all(:order => :created_at.desc) + Post.all(:order => :created_at.desc)
+  if admin?
+    @posts = Post.all(:order => :created_at.desc)
+  else
+    @posts = Post.where(:publish => true).sort(:created_at.desc) #MusicPost.all(:order => :created_at.desc) + Post.all(:order => :created_at.desc)
+  end
   erb :index
 end
 
@@ -37,14 +41,14 @@ post "/edit/about" do
 end
 
 get "/add/text" do
-  erb :addMusic
+  erb :addText
 end
 
 get "/edit/text/:id" do |id|
   post = Post.find(id)
   @title = post.title
   @mdtext = post.text
-  erb :addMusic
+  erb :addText
 end
 
 post "/edit/text/:id" do |id|
@@ -63,7 +67,8 @@ end
 
 post "/add/text" do
   post = Post.new(:title => params[:title], 
-                  :text => params[:mdtext], 
+                  :text => params[:mdtext],
+                  :publish => AppConfig["Status"],
                   :url => Url.new(:nice => params[:title]))
   if post.save
     @meldung = "successfully saved"
@@ -81,8 +86,9 @@ end
 
 post "/add/music" do
   if params[:soundFile] != nil && params[:soundSample] != nil
-    post = MusicPost.new(:title => params[:title], 
-                         :text => params[:description], 
+    post = MusicPost.new(:title => params[:title],
+                         :text => params[:description],
+                         :publish => AppConfig["Status"],
                          :preis => params[:preis], 
                          :downloadFileName => params[:soundFile][:tempfile].to_path + "," + params[:soundFile][:filename].to_s,
                          :soundCloudUrl => params[:soundSample][:tempfile].to_path,
@@ -136,6 +142,16 @@ get "/authPoint" do
   redirect "/add/music"
 end
 
+get "/publish/:id" do |id|
+  p = Post.find(id)
+  puts !p.publish
+  if p != nil
+    p.publish = !p.publish
+  end
+  p.save
+  redirect "/"
+end
+
 get "/id/:id" do |id|
   @text = Post.find(id)
   @music = MusicPost.find(id)
@@ -143,6 +159,8 @@ get "/id/:id" do |id|
 end
 
 get "/:name" do |name|
-  @post = Url.first(:nice => name).post
+  @post = Url.first(:nice => name)
+  halt 404 if @post == nil
+  @post = @post.post
   erb :index
 end

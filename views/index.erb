@@ -1,8 +1,9 @@
 <% if @posts %>
   <% @posts.each do |post| %>
-    <div style="float:none; background-color: white; padding: 20px; margin-bottom:35px; margin-left:auto; margin-right:auto;" class="span8">
-        <h1><%= post.title %></h1>
-      <div>
+    <div style="background-color: <%= (post.publish? ? "white" : "silver")%>;" class="span8 block">
+        <h1 class="pull-left"><%= post.title %></h1>
+        <a class="pull-right" href="/publish/<%= post.id %>"><%= (post.publish? ? "un" : "")%>publish</a>
+      <div style="clear:both;">
         <%= Maruku.new(post.text).to_html.byteslice(0, 1000) %>
       </div>
       <a href="/<%= post.url.nice %>">read more</a>
@@ -11,7 +12,7 @@
 <% end %>
 
 <% if @post %>
-   <div style="float:none; background-color: white; padding: 20px; margin-bottom:35px; margin-left:auto; margin-right:auto;" class="span8">
+   <div class="span8 block">
         <h1><%= @post.title %></h1>
       <div>
         <%= Maruku.new(@post.text).to_html %>

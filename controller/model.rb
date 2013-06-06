@@ -22,6 +22,7 @@ class Post
 
   key :title, String, :require => true, :length => { :in => 5..40 }
   key :text,  String, :require => true
+  key :publish, Boolean, :require => true
   one :url
   timestamps!
 end

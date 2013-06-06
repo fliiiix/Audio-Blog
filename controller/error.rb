@@ -1,3 +1,6 @@
+not_found do
+  erb :error404
+end
 error 401 do 
-	"yolo"
+  erb :error401
 end
