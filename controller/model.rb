@@ -15,6 +15,7 @@ class SoundCloudToken
 
   key :access_token,  String, :require => true
   key :refresh_token, String, :require => true
+  timestamps!
 end
 
 class Post
@@ -30,50 +31,56 @@ end
 class MusicPost < Post
   include MongoMapper::Document
 
-  key :preis,             Float,  :require => true, :numeric => true
-  key :downloadFileName,  String, :require => true
-  key :soundCloudUrl,     String, :require => true
-  key :SoundCloudId,      Float,  :require => true, :numeric => true
+  key :soundCloudUrl,  String,  :require => true
+  key :filePath,       String,  :require => true
+  key :fileName,       String,  :require => true
+  key :soundCloudId,   Integer, :require => true, :numeric => true
 
-  before_validation :uploadFile
   before_validation :uploadToSoundCloud
 
   private
-  def uploadToSoundCloud
-    lastToken = SoundCloudToken.last()
+  def uploadToSoundCloud()
+    lastToken = SoundCloudToken.last(:order => :created_at.asc)
+
+    #get soundcloud client
     if lastToken != nil
       client = Soundcloud.new(:access_token => lastToken.access_token)
-      if !client#expired?
+      
+      if client.expired?
         #need to refresh the token!
         client = Soundcloud.new(:client_id => AppConfig["SoundCloudClientId"],
                     :client_secret => AppConfig["SoundCloudClientSecret"],
                     :refresh_token => lastToken.refresh_token)
 
         newToken = SoundCloudToken.new(:access_token => client.access_token, 
-                         :refresh_token => client.refresh_token)
+                                       :refresh_token => client.refresh_token)
         newToken.save
       end
-      puts soundCloudUrl
-      # puts "file ist " + File.exist?(soundCloudUrl)
-      track = client.post('/tracks', :track => {
-        :title => "TestFile",
-        :asset_data => File.new(soundCloudUrl, 'rb')
-      })
-      self[:soundCloudUrl] = track.permalink_url
-      self[:SoundCloudId] = track.id
+
+      #File upload
+      filename = rand(36**8).to_s(36) + fileName
+      path = File.expand_path(File.dirname(__FILE__) + "/../public/uploads/#{filename}")
+
+      begin
+        FileUtils.cp(filePath, path)
+        self[:filePath] = path
+      rescue Exception => e
+        errors.add(:soundCloudUrl, "Ex: " + e.to_s)
+      end
+
+      #upload to soundcloud
+      begin
+        track = client.post('/tracks', :track => {
+          :title => "TestFile",
+          :asset_data => File.new(path, 'rb')
+        })
+        self[:soundCloudUrl] = track.permalink_url
+        self[:soundCloudId] = track.id
+      rescue Exception => e
+        errors.add(:soundCloudUrl, "Something unexpected went wrong, check your soundcloud account!")
+      end
     else
       errors.add(:soundCloudUrl, "No Soundcloud token!")
-    end
-  end
-
-  def uploadFile
-    fileArray = downloadFileName.split(",")
-    begin
-      filename = rand(36**8).to_s(36) + fileArray[1]
-      FileUtils.cp(fileArray[0], File.expand_path(filename, File.dirname(__FILE__) + "/public/uploads/"))
-      self[:downloadFileName] = filename
-    rescue Exception => e
-      errors.add(:downloadFileName, "Ex: " + e.to_s + " Alles: " + downloadFileName.to_s)
     end
   end
 end
@@ -89,6 +96,7 @@ class Url
   private
   def makeUrlNice
     if nice == nil
+      errors.add(:nice, "NO url for you!")
       return nil
     end
     url = sanitize(nice)

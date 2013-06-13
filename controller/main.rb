@@ -85,13 +85,12 @@ get "/add/music" do
 end
 
 post "/add/music" do
-  if params[:soundFile] != nil && params[:soundSample] != nil
+  if params[:soundSample] != nil
     post = MusicPost.new(:title => params[:title],
                          :text => params[:description],
                          :publish => AppConfig["Status"],
-                         :preis => params[:preis], 
-                         :downloadFileName => params[:soundFile][:tempfile].to_path + "," + params[:soundFile][:filename].to_s,
-                         :soundCloudUrl => params[:soundSample][:tempfile].to_path,
+                         :fileName => params[:soundSample][:filename],
+                         :filePath => params[:soundSample][:tempfile].to_path,
                          :url => Url.new(:nice => params[:title]))
     if post.save
       @meldung = "successfully saved"
@@ -108,7 +107,7 @@ get "/auth" do
   # create client object with app credentials
   client = Soundcloud.new(:client_id => AppConfig["SoundCloudClientId"],
                           :client_secret => AppConfig["SoundCloudClientSecret"],
-                          :redirect_uri => 'http://localhost:9393/authPoint')
+                          :redirect_uri => 'http://localhost:9292/authPoint')
 
   # redirect user to authorize URL
   puts client.authorize_url()
@@ -119,7 +118,7 @@ get "/authPoint" do
   # create client object with app credentials
   client = Soundcloud.new(:client_id => AppConfig["SoundCloudClientId"],
                           :client_secret => AppConfig["SoundCloudClientSecret"],
-                          :redirect_uri => 'http://localhost:9393/authPoint')
+                          :redirect_uri => 'http://localhost:9292/authPoint')
   # exchange authorization code for access token
   auth = client.exchange_token(:code => params[:code])
   
