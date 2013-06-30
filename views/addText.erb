@@ -1,6 +1,7 @@
 <div><%= @meldung %></div>
 <form action="/add/text" method="post" >
+  <h1>Write something</h1>
   <input type="text" name="title" class="input-block-level" placeholder="Titel" value="<%= @title if @title%>"><br>
-  <textarea name="mdtext" style="height:350px;" class="span12"><%= @mdtext if @mdtext%></textarea>
+  <textarea name="mdtext" class="input-block-level" rows="15"><%= @mdtext if @mdtext%></textarea>
   <input type="submit" value="Speichern" id="submit" class="btn btn-primary" style="float:right;">
 </form>

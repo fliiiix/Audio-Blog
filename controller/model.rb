@@ -24,6 +24,8 @@ class Post
   key :title, String, :require => true, :length => { :in => 5..40 }
   key :text,  String, :require => true
   key :publish, Boolean, :require => true
+  key :_type, String
+
   one :url
   timestamps!
 end
@@ -40,6 +42,9 @@ class MusicPost < Post
 
   private
   def uploadToSoundCloud()
+    if soundCloudUrl != nil
+      return
+    end
     lastToken = SoundCloudToken.last(:order => :created_at.asc)
 
     #get soundcloud client

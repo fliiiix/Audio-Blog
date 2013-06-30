@@ -1,11 +1,30 @@
+<% if !admin? %>
+  <div class="span8 block" style="min-height:140px;">
+    <% if @element != "music" && @element != "text" %>
+      <%= erb :createNew %>
+    <% end %>
+    <% if @element == "music" %>
+      <%= erb :addMusic %>
+    <% end %>
+    <% if @element == "text" %>
+      <%= erb :addText %>
+    <% end %>
+  </div>
+<% end %>
+
 <% if @posts %>
   <% @posts.each do |post| %>
     <div style="background-color: <%= (post.publish? ? "white" : "silver")%>;" class="span8 block">
         <h1 class="pull-left"><%= post.title %></h1>
-        <a class="pull-right" href="/publish/<%= post.id %>"><%= (post.publish? ? "un" : "")%>publish</a>
+        <% if admin? %>
+          <a class="pull-right" href="/publish/<%= post.id %>"><%= (post.publish? ? "un" : "")%>publish</a>
+        <% end %>
       <div style="clear:both;">
         <%= Maruku.new(post.text).to_html.byteslice(0, 1000) %>
       </div>
+      <% if post._type == "MusicPost"%>
+        <iframe id="sc-widget" src="https://w.soundcloud.com/player/?url=<%= post.soundCloudUrl%>&auto_play=false&auto_advance=true&buying=false&liking=false&download=true&sharing=false&show_artwork=true&show_comments=false&show_playcount=false&show_user=true&start_track=0" width="100%" height="166" scrolling="no" frameborder="no"></iframe>
+      <% end %>
       <a href="/<%= post.url.nice %>">read more</a>
     </div>
   <% end %>
@@ -17,42 +36,8 @@
       <div>
         <%= Maruku.new(@post.text).to_html %>
       </div>
+      <% if @post._type == "MusicPost" %>
+        <iframe id="sc-widget" src="https://w.soundcloud.com/player/?url=<%= @post.soundCloudUrl%>&auto_play=false&auto_advance=true&buying=false&liking=false&download=true&sharing=false&show_artwork=true&show_comments=false&show_playcount=false&show_user=true&start_track=0" width="100%" height="166" scrolling="no" frameborder="no"></iframe>
+        <% end %>
     </div>
 <% end %>
-
-<!-- <%# if @posts != nil%>
-  <%# @posts.each do |post| %>
-   <div class="frame">
-      <div class="title >
-        <b><%#= post.title %></b>
-      </div>
-      <p>
-        <%#= post.description %>
-      </p>
-      <div>
-        file name <%#= post.downloadFileName %>
-      </div>
-    </div>
-  <%# end %>
-<%# end %>
-
-<%# if @blog != nil%>
-  <%# @blog.each do |post| %>
-    <div style="float:none; background-color: white; padding: 20px; margin-bottom:35px; margin-left:auto; margin-right:auto;" class="span8">
-      <h1><%#= post.title %></h1>
-      <div>
-        <%#= Maruku.new(post.text).to_html.byteslice(0, 1000)  %>
-      </div>
-      <a href="/<%#= post.url.nice %>">read more</a>
-    </div>
-  <%# end %>
-<%# end %>
-
-<%# if @text != nil%>
-  <div style="float:none; background-color: white; padding: 20px; margin-bottom:35px; margin-left:auto; margin-right:auto;" class="span8">
-    <h1><%#= @text.title %></h1>
-    <div>
-      <%#= Maruku.new(@text.text).to_html %>
-    </div>
-  </div>
-<%# end %>-->

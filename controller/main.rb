@@ -9,12 +9,23 @@ require_relative "error.rb"
 require_relative "login.rb"
 
 get "/" do
-  if admin?
-    @posts = Post.all(:order => :created_at.desc)
-  else
-    @posts = Post.where(:publish => true).sort(:created_at.desc) #MusicPost.all(:order => :created_at.desc) + Post.all(:order => :created_at.desc)
-  end
+  @posts = GetPosts()
   erb :index
+end
+
+get "/add/:element" do |element|
+  @element = element
+  @posts = GetPosts()
+  erb :index
+end
+
+def GetPosts()
+  if admin?
+    posts = Post.all(:order => :created_at.desc)
+  else
+    posts = Post.where(:publish => true).sort(:created_at.desc) #MusicPost.all(:order => :created_at.desc) + Post.all(:order => :created_at.desc)
+  end
+  return posts
 end
 
 get "/about" do
@@ -40,11 +51,8 @@ post "/edit/about" do
   end
 end
 
-get "/add/text" do
-  erb :addText
-end
-
 get "/edit/text/:id" do |id|
+  protected!
   post = Post.find(id)
   @title = post.title
   @mdtext = post.text
@@ -52,6 +60,7 @@ get "/edit/text/:id" do |id|
 end
 
 post "/edit/text/:id" do |id|
+  protected!
   post = Post.find(id)
   post.title = params[:title]
   post.text = params[:mdtext]
@@ -66,6 +75,7 @@ post "/edit/text/:id" do |id|
 end
 
 post "/add/text" do
+  protected!
   post = Post.new(:title => params[:title], 
                   :text => params[:mdtext],
                   :publish => AppConfig["Status"],
@@ -77,14 +87,14 @@ post "/add/text" do
     @title = params[:title]
     @mdtext = params[:mdtext]
   end
-  erb :addText
-end
-
-get "/add/music" do
-  erb :addMusic
+  
+  @element = "text"
+  @posts = GetPosts()
+  erb :index
 end
 
 post "/add/music" do
+  protected!
   if params[:soundSample] != nil
     post = MusicPost.new(:title => params[:title],
                          :text => params[:description],
@@ -92,7 +102,7 @@ post "/add/music" do
                          :fileName => params[:soundSample][:filename],
                          :filePath => params[:soundSample][:tempfile].to_path,
                          :url => Url.new(:nice => params[:title]))
-    if post.save
+    if post.save!
       @meldung = "successfully saved"
     else
       @meldung = "Error(s): " + post.errors.map {|k,v| "#{k}: #{v}"}.to_s
@@ -100,7 +110,10 @@ post "/add/music" do
   else
     @meldung = "Error es muss ein Sample file und ein File ausgewählt werden!"
   end
-  erb :addMusic
+  
+  @element = "music"
+  @posts = GetPosts()
+  erb :index
 end
 
 get "/auth" do
@@ -142,6 +155,7 @@ get "/authPoint" do
 end
 
 get "/publish/:id" do |id|
+  protected!
   p = Post.find(id)
   puts !p.publish
   if p != nil
@@ -158,8 +172,12 @@ get "/id/:id" do |id|
 end
 
 get "/:name" do |name|
-  @post = Url.first(:nice => name)
-  halt 404 if @post == nil
-  @post = @post.post
+  url = Url.first(:nice => name)
+  halt 404 if url == nil
+  if url.post != nil
+    @post = url.post
+  else
+    @post = MusicPost.find(url.music_post_id)
+  end
   erb :index
 end
