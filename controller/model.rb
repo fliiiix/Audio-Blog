@@ -2,6 +2,7 @@
 require "mongo_mapper"
 require "fileutils"
 require "soundcloud"
+require "uri"
 
 class About
   include MongoMapper::Document
@@ -86,6 +87,27 @@ class MusicPost < Post
       end
     else
       errors.add(:soundCloudUrl, "No Soundcloud token!")
+    end
+  end
+end
+
+class VideoPost < Post
+  include MongoMapper::Document
+  
+  key :videoURL, String, :require => true
+
+  before_validation :isYouTubeLink
+
+  private
+  def isYouTubeLink()
+    if videoURL = nil || videoURL = ""
+      return
+    end
+    uri = URI.parse(videoURL)
+    youtubeURI = uri.host.include? "youtbe.com"
+    youtubeShortURI = uri.host.include? "youtu.be"
+    if !youtubeURI || !youtubeShortURI
+      errors.add(:videoURL, "It looks like your link is not from youtube use one from youtube.com or youtu.be")
     end
   end
 end

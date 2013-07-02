@@ -116,6 +116,28 @@ post "/add/music" do
   erb :index
 end
 
+post "/add/video" do
+  protected!
+  post = VideoPost.new(:title => params[:title], 
+                       :text => params[:mdtext],
+                       :videoURL => params[:videolink],
+                       :publish => AppConfig["Status"],
+                       :url => Url.new(:nice => params[:title]))
+
+  if post.save
+    @meldung = "successfully saved"
+  else
+    @meldung = "Error(s): " + post.errors.map {|k,v| "#{k}: #{v}"}.to_s
+    @title = params[:title]
+    @mdtext = params[:mdtext]
+    @videolink = params[:videolink]
+  end
+
+  @element = "video"
+  @posts = GetPosts()
+  erb :index
+end
+
 get "/auth" do
   # create client object with app credentials
   client = Soundcloud.new(:client_id => AppConfig["SoundCloudClientId"],

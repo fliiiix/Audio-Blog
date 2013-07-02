@@ -1,6 +1,6 @@
-<% if !admin? %>
+<% if admin? %>
   <div class="span8 block" style="min-height:140px;">
-    <% if @element != "music" && @element != "text" %>
+    <% if @element != "music" && @element != "text" && @element != "video" %>
       <%= erb :createNew %>
     <% end %>
     <% if @element == "music" %>
@@ -8,6 +8,9 @@
     <% end %>
     <% if @element == "text" %>
       <%= erb :addText %>
+    <% end %>
+    <% if @element == "video" %>
+      <%= erb :addVideo %>
     <% end %>
   </div>
 <% end %>
