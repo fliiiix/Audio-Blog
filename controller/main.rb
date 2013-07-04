@@ -86,9 +86,9 @@ post "/add/text" do
     @meldung = "Error(s): " + post.errors.map {|k,v| "#{k}: #{v}"}.to_s
     @title = params[:title]
     @mdtext = params[:mdtext]
+    @element = "text"
   end
   
-  @element = "text"
   @posts = GetPosts()
   erb :index
 end
@@ -106,12 +106,13 @@ post "/add/music" do
       @meldung = "successfully saved"
     else
       @meldung = "Error(s): " + post.errors.map {|k,v| "#{k}: #{v}"}.to_s
+      @element = "music"
     end
   else
     @meldung = "Error es muss ein Sample file und ein File ausgewählt werden!"
+    @element = "music"
   end
   
-  @element = "music"
   @posts = GetPosts()
   erb :index
 end
@@ -131,9 +132,9 @@ post "/add/video" do
     @title = params[:title]
     @mdtext = params[:mdtext]
     @videolink = params[:videolink]
+    @element = "video"
   end
-
-  @element = "video"
+  
   @posts = GetPosts()
   erb :index
 end

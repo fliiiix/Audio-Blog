@@ -41,6 +41,10 @@ class MusicPost < Post
 
   before_validation :uploadToSoundCloud
 
+  def embedded()
+    '<iframe id="sc-widget" src="https://w.soundcloud.com/player/?url=' + soundCloudUrl + '&auto_play=false&auto_advance=true&buying=false&liking=false&download=true&sharing=false&show_artwork=true&show_comments=false&show_playcount=false&show_user=true&start_track=0" width="100%" height="166" scrolling="no" frameborder="no"></iframe>'
+  end
+
   private
   def uploadToSoundCloud()
     if soundCloudUrl != nil
@@ -96,18 +100,36 @@ class VideoPost < Post
   
   key :videoURL, String, :require => true
 
-  before_validation :isYouTubeLink
+  validate :isYouTubeLink
+
+  def embedded()
+    '<iframe id="ytplayer" type="text/html" width="100%" height="410" src="http://www.youtube.com/embed/' + youtube_id(videoURL) + '" frameborder="0"/>'
+  end
+
+  def youtube_id(youtube_url)
+    if youtube_url[/youtu\.be\/([^\?]*)/]
+      youtube_id = $1
+    else
+      # Regex from # http://stackoverflow.com/questions/3452546/javascript-regex-how-to-get-youtube-video-id-from-url/4811367#4811367
+      youtube_url[/^.*((v\/)|(embed\/)|(watch\?))\??v?=?([^\&\?]*).*/]
+      youtube_id = $5
+    end
+    return youtube_id
+  end
 
   private
   def isYouTubeLink()
-    if videoURL = nil || videoURL = ""
+    if videoURL == nil
       return
     end
-    uri = URI.parse(videoURL)
-    youtubeURI = uri.host.include? "youtbe.com"
-    youtubeShortURI = uri.host.include? "youtu.be"
-    if !youtubeURI || !youtubeShortURI
-      errors.add(:videoURL, "It looks like your link is not from youtube use one from youtube.com or youtu.be")
+
+    begin
+      uri = URI.parse(videoURL)
+      if uri.host.index("youtu") == nil
+        errors.add(:videoURL, "It looks like your link is not from YouTube use one from youtube.com or youtu.be")
+      end
+    rescue Exception => e
+      errors.add(:videoURL, "It don't look like a link :O")
     end
   end
 end

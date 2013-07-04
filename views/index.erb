@@ -17,6 +17,7 @@
 
 <% if @posts %>
   <% @posts.each do |post| %>
+   <% puts post.url.nice %>
     <div style="background-color: <%= (post.publish? ? "white" : "silver")%>;" class="span8 block">
         <h1 class="pull-left"><%= post.title %></h1>
         <% if admin? %>
@@ -25,9 +26,8 @@
       <div style="clear:both;">
         <%= Maruku.new(post.text).to_html.byteslice(0, 1000) %>
       </div>
-      <% if post._type == "MusicPost"%>
-        <iframe id="sc-widget" src="https://w.soundcloud.com/player/?url=<%= post.soundCloudUrl%>&auto_play=false&auto_advance=true&buying=false&liking=false&download=true&sharing=false&show_artwork=true&show_comments=false&show_playcount=false&show_user=true&start_track=0" width="100%" height="166" scrolling="no" frameborder="no"></iframe>
-      <% end %>
+      <%= post.embedded if post._type == "MusicPost" %>
+      <%= post.embedded if post._type == "VideoPost"%>
       <a href="/<%= post.url.nice %>">read more</a>
     </div>
   <% end %>
