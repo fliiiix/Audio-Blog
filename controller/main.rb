@@ -10,6 +10,12 @@ require_relative "login.rb"
 
 get "/" do
   @posts = GetPosts()
+  for p in @posts
+    puts p.title
+    puts p.url.nice
+    puts p.text
+    puts p.publish
+  end
   erb :index
 end
 
@@ -97,7 +103,7 @@ post "/add/music" do
   protected!
   if params[:soundSample] != nil
     post = MusicPost.new(:title => params[:title],
-                         :text => params[:description],
+                         :text => params[:mdtext],
                          :publish => AppConfig["Status"],
                          :fileName => params[:soundSample][:filename],
                          :filePath => params[:soundSample][:tempfile].to_path,
@@ -121,8 +127,8 @@ post "/add/video" do
   protected!
   post = VideoPost.new(:title => params[:title], 
                        :text => params[:mdtext],
-                       :videoURL => params[:videolink],
                        :publish => AppConfig["Status"],
+                       :videoURL => params[:videolink],
                        :url => Url.new(:nice => params[:title]))
 
   if post.save
@@ -174,7 +180,7 @@ get "/authPoint" do
   token = SoundCloudToken.new(:access_token => auth[:access_token], 
                               :refresh_token => auth[:refresh_token])
   token.save
-  redirect "/add/music"
+  redirect "/"
 end
 
 get "/publish/:id" do |id|
@@ -197,10 +203,20 @@ end
 get "/:name" do |name|
   url = Url.first(:nice => name)
   halt 404 if url == nil
+  
   if url.post != nil
     @post = url.post
-  else
+  end
+
+  if url.respond_to?(:music_post_id)
     @post = MusicPost.find(url.music_post_id)
   end
+  
+  if url.respond_to?(:video_post_id)
+    @post = VideoPost.find(url.video_post_id)
+  end
+
+  halt 404 if !admin? && @post.publish == false 
+
   erb :index
 end

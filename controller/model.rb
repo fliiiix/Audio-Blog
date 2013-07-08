@@ -81,7 +81,7 @@ class MusicPost < Post
       #upload to soundcloud
       begin
         track = client.post('/tracks', :track => {
-          :title => "TestFile",
+          :title => fileName,
           :asset_data => File.new(path, 'rb')
         })
         self[:soundCloudUrl] = track.permalink_url
@@ -103,7 +103,7 @@ class VideoPost < Post
   validate :isYouTubeLink
 
   def embedded()
-    '<iframe id="ytplayer" type="text/html" width="100%" height="410" src="http://www.youtube.com/embed/' + youtube_id(videoURL) + '" frameborder="0"/>'
+    '<iframe id="ytplayer" type="text/html" width="100%" height="410" src="http://www.youtube.com/embed/' + youtube_id(videoURL) + '" frameborder="0"></iframe>'
   end
 
   def youtube_id(youtube_url)

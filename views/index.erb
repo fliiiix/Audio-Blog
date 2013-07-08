@@ -1,5 +1,6 @@
 <% if admin? %>
   <div class="span8 block" style="min-height:140px;">
+    <%= "Hey you there is no souncloud account fix that click -> <a href='/auth'>here</a> <-" if SoundCloudToken.first == nil%>
     <% if @element != "music" && @element != "text" && @element != "video" %>
       <%= erb :createNew %>
     <% end %>
@@ -17,12 +18,11 @@
 
 <% if @posts %>
   <% @posts.each do |post| %>
-   <% puts post.url.nice %>
     <div style="background-color: <%= (post.publish? ? "white" : "silver")%>;" class="span8 block">
-        <h1 class="pull-left"><%= post.title %></h1>
-        <% if admin? %>
-          <a class="pull-right" href="/publish/<%= post.id %>"><%= (post.publish? ? "un" : "")%>publish</a>
-        <% end %>
+      <h1 class="pull-left"><%= post.title %></h1>
+      <% if admin? %>
+        <a class="pull-right" href="/publish/<%= post.id %>"><%= (post.publish? ? "un" : "")%>publish</a>
+      <% end %>
       <div style="clear:both;">
         <%= Maruku.new(post.text).to_html.byteslice(0, 1000) %>
       </div>
@@ -34,13 +34,16 @@
 <% end %>
 
 <% if @post %>
-   <div class="span8 block">
-        <h1><%= @post.title %></h1>
-      <div>
-        <%= Maruku.new(@post.text).to_html %>
-      </div>
-      <% if @post._type == "MusicPost" %>
-        <iframe id="sc-widget" src="https://w.soundcloud.com/player/?url=<%= @post.soundCloudUrl%>&auto_play=false&auto_advance=true&buying=false&liking=false&download=true&sharing=false&show_artwork=true&show_comments=false&show_playcount=false&show_user=true&start_track=0" width="100%" height="166" scrolling="no" frameborder="no"></iframe>
-        <% end %>
+  <div style="background-color: <%= (@post.publish? ? "white" : "silver")%>;" class="span8 block">
+    <h1 class="pull-left"><%= @post.title %></h1>
+    <% if admin? %>
+      <a class="pull-right" href="/publish/<%= @post.id %>"><%= (@post.publish? ? "un" : "")%>publish</a>
+    <% end %>
+    <div style="clear:both;">
+      <%= Maruku.new(@post.text).to_html%>
     </div>
+    <%= @post.embedded if @post._type == "MusicPost" %>
+    <%= @post.embedded if @post._type == "VideoPost"%>
+    <a href="/<%= @post.url.nice %>">read more</a>
+  </div>
 <% end %>
