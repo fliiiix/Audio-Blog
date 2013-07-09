@@ -1,0 +1,9 @@
+<% if !admin?; halt 401; end%> 
+<div><%= @meldung %></div>
+<form action="/add/video" method="post" enctype="multipart/form-data">
+	<h1>Share your Video</h1>
+	<input type="text" name="title" placeholder="Titel" value="<%= @title if @title %>" class="input-block-level">
+	<textarea name="mdtext" class="input-block-level" rows="15"><%= @mdtext if @mdtext%></textarea>
+	<input type="text" name="videolink" placeholder="YouTube Link" value="<%= @videolink if @videolink%>" class="input-block-level"><br>
+	<input type="submit" value="Speichern" id="submit" class="btn btn-primary pull-right">
+</form>

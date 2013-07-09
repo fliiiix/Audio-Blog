@@ -1,5 +1,5 @@
 <% if admin? %>
-  <div class="span8 block" style="min-height:140px;">
+  <div class="block" style="min-height:140px;">
     <%= "Hey you there is no souncloud account fix that click -> <a href='/auth'>here</a> <-" if SoundCloudToken.first == nil%>
     <% if @element != "music" && @element != "text" && @element != "video" %>
       <%= erb :createNew %>
@@ -18,7 +18,7 @@
 
 <% if @posts %>
   <% @posts.each do |post| %>
-    <div style="background-color: <%= (post.publish? ? "white" : "silver")%>;" class="span8 block">
+    <div style="background-color: <%= (post.publish? ? "white" : "silver")%>;" class="block">
       <h1 class="pull-left"><%= post.title %></h1>
       <% if admin? %>
         <a class="pull-right" href="/publish/<%= post.id %>"><%= (post.publish? ? "un" : "")%>publish</a>
@@ -34,12 +34,12 @@
 <% end %>
 
 <% if @post %>
-  <div style="background-color: <%= (@post.publish? ? "white" : "silver")%>;" class="span8 block">
+  <div style="background-color: <%= (@post.publish? ? "white" : "silver")%>;" class="block">
     <h1 class="pull-left"><%= @post.title %></h1>
     <% if admin? %>
       <a class="pull-right" href="/publish/<%= @post.id %>"><%= (@post.publish? ? "un" : "")%>publish</a>
     <% end %>
-    <div style="clear:both;">
+    <div class="clear">
       <%= Maruku.new(@post.text).to_html%>
     </div>
     <%= @post.embedded if @post._type == "MusicPost" %>
