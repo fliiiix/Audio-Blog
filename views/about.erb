@@ -1,4 +1,4 @@
-<%= '<a href="/edit/about" class="btn btn-primary pull-right">Edit <i class="icon-pencil icon-white"></i></a>' if admin?  %>
+<%= '<a href="/edit/about" style="margin-top: 5px; margin-right: 5px; font-size:18px;" class="pull-right"><img src="/img/edit.png" height="16px;"> Edit</a>' if admin?  %>
 <div class="block">
 	<%= Maruku.new(@about.text).to_html if @about%>
 </div>

@@ -18,6 +18,8 @@
       .pull-left {float: left;}
       .pure-menu li a:hover, .pure-menu li a:focus { color: black; background: none;}
       .clear {clear:both;} 
+      .mBottom {margin-bottom: 10px !important;}
+      a, a:hover, a:visited {color: #3B8BBA; text-decoration: none;}
     </style>
   </head>
 
@@ -28,14 +30,13 @@
               <a class="pure-menu-heading" href="/"><%= AppConfig["BlogTitel"] %></a>
 
               <ul>
-                  <li class="pure-menu-selected"><a href="/">Home</a></li>
-                  <li><a href="/about">About</a></li>
-                  
+                  <li class="<%= "pure-menu-selected" if !@aboutMenu %>"><a href="/">Home</a></li>
+                  <li class="<%= "pure-menu-selected" if @aboutMenu %>"><a href="/about">About</a></li>
               </ul>
 
               <ul class="pull-right">
                   <% if admin? %>
-                    <li>Hi <%= AppConfig["User"] %></li>
+                    <li><img src="/img/user.png" height="12px;"> Hi <%= AppConfig["User"] %></li>
                     <li><a href="/logout">Logout</a></li>
                   <% else %>
                     <li><a href="/login">Login</a></li>

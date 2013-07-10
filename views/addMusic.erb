@@ -1,9 +1,10 @@
 <% if !admin?; halt 401; end%> 
 <div><%= @meldung %></div>
-<form action="/add/music" method="post" enctype="multipart/form-data">
+<form action="/add/music" method="post" enctype="multipart/form-data" class="pure-form">
 	<h1>Add a Song</h1>
-	<input type="text" name="title" placeholder="Titel" value="<%= @title if @title %>" class="input-block-level">
-	<textarea name="mdtext" class="input-block-level" rows="15"><%= @mdtext if @mdtext %></textarea>
+	<input type="text" name="title" placeholder="Titel" value="<%= @title if @title %>" class="pure-input-1 mBottom" />
+	<textarea name="mdtext" rows="15" class="pure-input-1 mBottom" ><%= @mdtext if @mdtext %></textarea>
 	<input name="soundSample" type="file"><br>
-	<input type="submit" value="Speichern" id="submit" class="btn btn-primary pull-right">
+	<input type="submit" value="Speichern" id="submit" class="pure-button pure-button-primary pure-button-small pull-right">
 </form>
+<div style="clear:both; font-size:0px">&nbsp;</div>

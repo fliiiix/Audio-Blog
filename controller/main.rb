@@ -10,12 +10,6 @@ require_relative "login.rb"
 
 get "/" do
   @posts = GetPosts()
-  for p in @posts
-    puts p.title
-    puts p.url.nice
-    puts p.text
-    puts p.publish
-  end
   erb :index
 end
 
@@ -36,6 +30,7 @@ end
 
 get "/about" do
   @about = About.last(:order => :created_at.asc)
+  @aboutMenu = true
   erb :about 
 end
 
