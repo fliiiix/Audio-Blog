@@ -1,6 +1,11 @@
 <% if admin? %>
-  <div class="block" style="min-height:140px;">
-    <%= "Hey you there is no souncloud account fix that click -> <a href='/auth'>here</a> <-" if SoundCloudToken.first == nil%>
+  <div class="block">
+    <% if SoundCloudToken.first == nil %>
+      <aside>
+        Hey you there is no souncloud account fix that fast: 
+        <a href='/auth' class="pure-button"><i class='icon-soundcloud'></i> connect</a>
+      </aside>
+    <% end %>
     <% if @element != "music" && @element != "text" && @element != "video" %>
       <%= erb :createNew %>
     <% end %>
