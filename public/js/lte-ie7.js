@@ -11,8 +11,10 @@ window.onload = function() {
 			'icon-music' : '&#xe002;',
 			'icon-camera' : '&#xe003;',
 			'icon-user' : '&#xe004;',
+			'icon-soundcloud' : '&#xe006;',
 			'icon-feed' : '&#xe005;',
-			'icon-soundcloud' : '&#xe006;'
+			'icon-arrow-left' : '&#xe007;',
+			'icon-arrow-right' : '&#xe008;'
 		},
 		els = document.getElementsByTagName('*'),
 		i, attr, html, c, el;

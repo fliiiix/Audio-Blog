@@ -13,15 +13,25 @@ get "/" do
   erb :index
 end
 
+get "/page/:id" do |pageId|
+  @posts = GetPosts(pageId)
+  @pageId = pageId
+  erb :index
+end
+
 get "/add/:element" do |element|
   @element = element
   @posts = GetPosts()
   erb :index
 end
 
-def GetPosts()
+def GetPosts(page = 0, elementPerPage = 3)
   if admin?
-    posts = Post.all(:order => :created_at.desc)
+    posts = Post.paginate({
+          :order => :created_at.desc,
+          :per_page => elementPerPage,
+          :page => page,
+      })
   else
     posts = Post.where(:publish => true).sort(:created_at.desc) #MusicPost.all(:order => :created_at.desc) + Post.all(:order => :created_at.desc)
   end
@@ -60,6 +70,7 @@ get "/edit/text/:id" do |id|
   erb :addText
 end
 
+#rewrite!
 post "/edit/text/:id" do |id|
   protected!
   post = Post.find(id)
@@ -82,14 +93,14 @@ post "/add/text" do
                   :publish => AppConfig["Status"],
                   :url => Url.new(:nice => params[:title]))
   if post.save
-    @meldung = "successfully saved"
-  else
-    @meldung = "Error(s): " + post.errors.map {|k,v| "#{k}: #{v}"}.to_s
-    @title = params[:title]
-    @mdtext = params[:mdtext]
-    @element = "text"
+    redirect "/"
   end
-  
+
+  @meldung = "Error(s): " + post.errors.map {|k,v| "#{k}: #{v}"}.to_s
+  @title = params[:title]
+  @mdtext = params[:mdtext]
+  @element = "text"
+
   @posts = GetPosts()
   erb :index
 end
@@ -97,23 +108,28 @@ end
 post "/add/music" do
   protected!
   if params[:soundSample] != nil
-    post = MusicPost.new(:title => params[:title],
-                         :text => params[:mdtext],
-                         :publish => AppConfig["Status"],
-                         :fileName => params[:soundSample][:filename],
-                         :filePath => params[:soundSample][:tempfile].to_path,
-                         :url => Url.new(:nice => params[:title]))
-    if post.save!
-      @meldung = "successfully saved"
-    else
-      @meldung = "Error(s): " + post.errors.map {|k,v| "#{k}: #{v}"}.to_s
-      @element = "music"
-    end
+    filename = params[:soundSample][:filename]
+    filepath = params[:soundSample][:tempfile].to_path
   else
-    @meldung = "Error es muss ein Sample file und ein File ausgewählt werden!"
-    @element = "music"
+    filename = ""
+    filepath = ""
   end
   
+  post = MusicPost.new(:title => params[:title],
+                       :text => params[:mdtext],
+                       :publish => AppConfig["Status"],
+                       :fileName => filename,
+                       :filePath => filepath,
+                       :url => Url.new(:nice => params[:title]))
+  if post.save
+    redirect "/"
+  end
+
+  @meldung = "Error(s): " + post.errors.map {|k,v| "#{k}: #{v}"}.to_s
+  @title = params[:title]
+  @mdtext = params[:mdtext]
+  @element = "music"
+
   @posts = GetPosts()
   erb :index
 end
@@ -127,15 +143,14 @@ post "/add/video" do
                        :url => Url.new(:nice => params[:title]))
 
   if post.save
-    @meldung = "successfully saved"
-  else
-    @meldung = "Error(s): " + post.errors.map {|k,v| "#{k}: #{v}"}.to_s
-    @title = params[:title]
-    @mdtext = params[:mdtext]
-    @videolink = params[:videolink]
-    @element = "video"
+    redirect "/"
   end
-  
+
+  @meldung = "Error(s): " + post.errors.map {|k,v| "#{k}: #{v}"}.to_s
+  @title = params[:title]
+  @mdtext = params[:mdtext]
+  @videolink = params[:videolink]
+  @element = "video"
   @posts = GetPosts()
   erb :index
 end
@@ -181,7 +196,6 @@ end
 get "/publish/:id" do |id|
   protected!
   p = Post.find(id)
-  puts !p.publish
   if p != nil
     p.publish = !p.publish
   end
