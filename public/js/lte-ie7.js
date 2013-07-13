@@ -14,7 +14,9 @@ window.onload = function() {
 			'icon-soundcloud' : '&#xe006;',
 			'icon-feed' : '&#xe005;',
 			'icon-arrow-left' : '&#xe007;',
-			'icon-arrow-right' : '&#xe008;'
+			'icon-arrow-right' : '&#xe008;',
+			'icon-cancel' : '&#xe009;',
+			'icon-box-remove' : '&#xe00a;'
 		},
 		els = document.getElementsByTagName('*'),
 		i, attr, html, c, el;

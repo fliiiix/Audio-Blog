@@ -49,10 +49,27 @@
     </div>
     <%= @post.embedded if @post._type == "MusicPost" %>
     <%= @post.embedded if @post._type == "VideoPost"%>
-    <a href="/<%= @post.url.nice %>">read more</a>
   </div>
 <% end %>
-<div id="paging" style="margin-bottom:20px;">
-  <a href="/page/1" class="pure-button">Back</a>
-  <a href="/page/2" class="pure-button">Next</a>
-</div>
+
+<% if @postPagesTotal != nil && @postPagesTotal > 1 %>
+  <div id="paging" class="block" style="margin-bottom:20px;">
+    <center>
+      <% if @pageId > 1 %>
+        <a href="/page/<%= @pageId -1 %>" class="pure-button"><i class="icon-arrow-left"></i> Back</a>
+      <% end %>
+
+      <% (1..@postPagesTotal).each do |i| %>
+        <% if i != @pageId %>
+          <a href="/page/<%= i %>"><%= i %></a>
+        <% else %>
+          <span><%= i %></span>
+        <% end %>
+      <% end %>
+      
+      <% if @postPagesTotal > @pageId %>
+        <a href="/page/<%= @pageId + 1 %>" class="pure-button">Next <i class="icon-arrow-right"></i></a>
+      <% end %>
+    </center>
+  </div>
+<% end %>

@@ -13,44 +13,49 @@ get "/" do
   erb :index
 end
 
-get "/page/:id" do |pageId|
+get "/page/?" do
+  redirect "/"
+end
+
+get "/page/:id/?" do |pageId|
   @posts = GetPosts(pageId)
-  @pageId = pageId
   erb :index
 end
 
-get "/add/:element" do |element|
+get "/add/:element/?" do |element|
   @element = element
   @posts = GetPosts()
   erb :index
 end
 
-def GetPosts(page = 0, elementPerPage = 3)
+def GetPosts(page = 1, elementPerPage = 10)
+  @pageId = page.to_i
   if admin?
     posts = Post.paginate({
           :order => :created_at.desc,
           :per_page => elementPerPage,
           :page => page,
       })
+    @postPagesTotal = (Post.all.count / elementPerPage)
   else
     posts = Post.where(:publish => true).sort(:created_at.desc) #MusicPost.all(:order => :created_at.desc) + Post.all(:order => :created_at.desc)
   end
   return posts
 end
 
-get "/about" do
+get "/about/?" do
   @about = About.last(:order => :created_at.asc)
   @aboutMenu = true
   erb :about 
 end
 
-get "/edit/about" do
+get "/edit/about/?" do
   protected!
   @about = About.last(:order => :created_at.asc)
   erb :aboutEdit
 end
 
-post "/edit/about" do
+post "/edit/about/?" do
   protected!
   about = About.new(:text => params[:mdtext])
 
@@ -62,7 +67,7 @@ post "/edit/about" do
   end
 end
 
-get "/edit/text/:id" do |id|
+get "/edit/text/:id/?" do |id|
   protected!
   post = Post.find(id)
   @title = post.title
@@ -71,7 +76,7 @@ get "/edit/text/:id" do |id|
 end
 
 #rewrite!
-post "/edit/text/:id" do |id|
+post "/edit/text/:id/?" do |id|
   protected!
   post = Post.find(id)
   post.title = params[:title]
@@ -86,7 +91,7 @@ post "/edit/text/:id" do |id|
   end
 end
 
-post "/add/text" do
+post "/add/text/?" do
   protected!
   post = Post.new(:title => params[:title], 
                   :text => params[:mdtext],
@@ -105,7 +110,7 @@ post "/add/text" do
   erb :index
 end
 
-post "/add/music" do
+post "/add/music/?" do
   protected!
   if params[:soundSample] != nil
     filename = params[:soundSample][:filename]
@@ -134,7 +139,7 @@ post "/add/music" do
   erb :index
 end
 
-post "/add/video" do
+post "/add/video/?" do
   protected!
   post = VideoPost.new(:title => params[:title], 
                        :text => params[:mdtext],
@@ -155,7 +160,7 @@ post "/add/video" do
   erb :index
 end
 
-get "/auth" do
+get "/auth/?" do
   # create client object with app credentials
   client = Soundcloud.new(:client_id => AppConfig["SoundCloudClientId"],
                           :client_secret => AppConfig["SoundCloudClientSecret"],
@@ -166,26 +171,13 @@ get "/auth" do
   redirect client.authorize_url()
 end
 
-get "/authPoint" do
+get "/authPoint/?" do
   # create client object with app credentials
   client = Soundcloud.new(:client_id => AppConfig["SoundCloudClientId"],
                           :client_secret => AppConfig["SoundCloudClientSecret"],
                           :redirect_uri => 'http://localhost:9292/authPoint')
   # exchange authorization code for access token
   auth = client.exchange_token(:code => params[:code])
-  
-  if !client#expired?
-    x = "true"
-  else
-    x = "false"
-  end
-
-  puts "expired: " + x
-  puts "user: " + client.get('/me').username
-
-  puts "access_token hash: " + auth[:access_token]
-  puts "expires_in hash: " + auth[:expires_in].to_s
-  puts "refresh_token hash: " + auth[:refresh_token]
 
   token = SoundCloudToken.new(:access_token => auth[:access_token], 
                               :refresh_token => auth[:refresh_token])
@@ -203,13 +195,13 @@ get "/publish/:id" do |id|
   redirect "/"
 end
 
-get "/id/:id" do |id|
+get "/id/:id/?" do |id|
   @text = Post.find(id)
   @music = MusicPost.find(id)
   erb :index
 end
 
-get "/:name" do |name|
+get "/:name/?" do |name|
   url = Url.first(:nice => name)
   halt 404 if url == nil
   
