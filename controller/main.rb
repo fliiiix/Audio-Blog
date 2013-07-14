@@ -164,7 +164,7 @@ get "/auth/?" do
   # create client object with app credentials
   client = Soundcloud.new(:client_id => AppConfig["SoundCloudClientId"],
                           :client_secret => AppConfig["SoundCloudClientSecret"],
-                          :redirect_uri => 'http://localhost:9292/authPoint')
+                          :redirect_uri => 'http://music.l33tsource.com/authPoint')
 
   # redirect user to authorize URL
   puts client.authorize_url()
@@ -175,7 +175,7 @@ get "/authPoint/?" do
   # create client object with app credentials
   client = Soundcloud.new(:client_id => AppConfig["SoundCloudClientId"],
                           :client_secret => AppConfig["SoundCloudClientSecret"],
-                          :redirect_uri => 'http://localhost:9292/authPoint')
+                          :redirect_uri => 'http://music.l33tsource.com/authPoint')
   # exchange authorization code for access token
   auth = client.exchange_token(:code => params[:code])
 
