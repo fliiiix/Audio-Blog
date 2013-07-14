@@ -1,8 +1,7 @@
 use Rack::Session::Pool
 
 helpers do
-  #def admin? ; session["isLogdIn"] == true; end
-  def admin? ; true; end
+  def admin? ; session["isLogdIn"] == true || @debug; end
   def protected! ; halt 401 unless admin? ; end
 end
 
@@ -12,6 +11,7 @@ configure :development do
   set :show_exceptions, true
   set :views, Proc.new { File.join(root, "../views") }
   set :public_folder, Proc.new { File.join(root, "../public") }
+  @debug = true
 end
 
 configure :production do
