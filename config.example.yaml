@@ -8,5 +8,7 @@ production:
   SoundCloudClientId: xxx
   SoundCloudClientSecret: xxx
   BlogTitel: Music Blog
-  User: 
-  Pass: 
+  User: test
+  Pass: ChangeMe
+  MongoUser: user
+  MongoPass: pass
