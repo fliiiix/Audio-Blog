@@ -25,9 +25,7 @@
   <% @posts.each do |post| %>
     <div style="background-color: <%= (post.publish? ? "white" : "silver")%>;" class="block">
       <h1 class="pull-left"><%= post.title %></h1>
-      <% if admin? %>
-        <a class="pull-right" href="/publish/<%= post.id %>"><%= (post.publish? ? "un" : "")%>publish</a>
-      <% end %>
+      <%= erb :adminPostControl, :locals => {:post => post} if admin? %>
       <div style="clear:both;">
         <%= Maruku.new(post.text).to_html.byteslice(0, 1000) %>
       </div>
@@ -41,9 +39,7 @@
 <% if @post %>
   <div style="background-color: <%= (@post.publish? ? "white" : "silver")%>;" class="block">
     <h1 class="pull-left"><%= @post.title %></h1>
-    <% if admin? %>
-      <a class="pull-right" href="/publish/<%= @post.id %>"><%= (@post.publish? ? "un" : "")%>publish</a>
-    <% end %>
+    <%= erb :adminPostControl, :locals => {:post => @post} if admin? %>
     <div class="clear">
       <%= Maruku.new(@post.text).to_html%>
     </div>

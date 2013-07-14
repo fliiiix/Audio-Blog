@@ -1,8 +1,8 @@
 use Rack::Session::Pool
 
 helpers do
-  def admin? ; session["isLogdIn"] == true; end
-  #def admin? ; true; end
+  #def admin? ; session["isLogdIn"] == true; end
+  def admin? ; true; end
   def protected! ; halt 401 unless admin? ; end
 end
 

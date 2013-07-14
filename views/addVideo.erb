@@ -1,6 +1,6 @@
 <% if !admin?; halt 401; end%> 
 <div><%= @meldung %></div>
-<form action="/add/video" method="post" class="pure-form">
+<form action="/<%= @postId ? 'edit' : 'add' %>/video<%= '/' + @postId if @postId%>" method="post" class="pure-form">
 	<h1>Share your Video</h1>
 	<input type="text" name="title" placeholder="Titel" value="<%= @title if @title %>" class="pure-input-1 mBottom">
 	<textarea name="mdtext" class="pure-input-1 mBottom" rows="15"><%= @mdtext if @mdtext%></textarea>

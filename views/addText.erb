@@ -1,5 +1,5 @@
 <div><%= @meldung %></div>
-<form action="/add/text" method="post" class="pure-form">
+<form action="/<%= @postId ? 'edit' : 'add' %>/text<%= '/' + @postId if @postId%>" method="post" class="pure-form">
   <h1>Write something</h1>
   <input type="text" name="title" class="pure-input-1 mBottom" placeholder="Titel" value="<%= @title if @title %>">
   <textarea name="mdtext" class="pure-input-1 mBottom" rows="15"><%= @mdtext if @mdtext%></textarea>

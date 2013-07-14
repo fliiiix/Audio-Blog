@@ -67,30 +67,6 @@ post "/edit/about/?" do
   end
 end
 
-get "/edit/text/:id/?" do |id|
-  protected!
-  post = Post.find(id)
-  @title = post.title
-  @mdtext = post.text
-  erb :addText
-end
-
-#rewrite!
-post "/edit/text/:id/?" do |id|
-  protected!
-  post = Post.find(id)
-  post.title = params[:title]
-  post.text = params[:mdtext]
-
-  if post.save
-    @meldung = "successfully saved"
-  else
-    @meldung = "Error(s): " + post.errors.map {|k,v| "#{k}: #{v}"}.to_s
-    @title = params[:title]
-    @mdtext = params[:mdtext]
-  end
-end
-
 post "/add/text/?" do
   protected!
   post = Post.new(:title => params[:title], 
@@ -185,7 +161,71 @@ get "/authPoint/?" do
   redirect "/"
 end
 
-get "/publish/:id" do |id|
+get "/post/delete/:id/?" do |id|
+  protected!
+  Post.destroy(id)
+  redirect "/"
+end
+
+get "/post/edit/:id/?" do |id|
+  protected!
+  @postId = id
+  p = Post.find(id)
+  
+  @title = p.title
+  @mdtext = p.text
+
+  if p._type == "Post"
+    @element = "text"
+  end
+  if p._type == "MusicPost"
+    @element = "music"
+  end
+  if p._type == "VideoPost"
+    @element = "video"
+    @videolink = p.videoURL
+  end
+  
+  @posts = GetPosts()
+  erb :index
+end
+
+post "/edit/:type/:id/?" do |type, id|
+  p = Post.find(id)
+
+  p.title = params["title"]
+  p.text = params["mdtext"]
+
+  if p._type == "VideoPost"
+    p.videoURL = params["videolink"]
+  end
+
+  if p.save
+    redirect "/"
+  end
+
+  @meldung = "Error(s): " + p.errors.map {|k,v| "#{k}: #{v}"}.to_s
+  @title = params[:title]
+  @mdtext = params[:mdtext]
+  @videolink = params[:videolink]
+  
+  if p._type == "Post"
+    @element = "text"
+  end
+  if p._type == "MusicPost"
+    @element = "music"
+  end
+  if p._type == "VideoPost"
+    @element = "video"
+    @videolink = params[:videolink]
+  end
+
+  @posts = GetPosts()
+  erb :index
+end
+
+
+get "/post/publish/:id/?" do |id|
   protected!
   p = Post.find(id)
   if p != nil
