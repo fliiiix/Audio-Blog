@@ -19,7 +19,7 @@ configure :production do
   set :views, Proc.new { File.join(root, "../views") }
   set :public_folder, Proc.new { File.join(root, "../public") }
 
-  MongoMapper.connection = Mongo::Connection.new('localhost', 20799)
+  MongoMapper.connection = Mongo::Connection.new('localhost', AppConfig["MongoPort"])
   MongoMapper.database = 'music'
   MongoMapper.database.authenticate(AppConfig["MongoUser"], AppConfig["MongoPass"])
 end

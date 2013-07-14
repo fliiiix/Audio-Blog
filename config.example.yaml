@@ -12,3 +12,4 @@ production:
   Pass: ChangeMe
   MongoUser: user
   MongoPass: pass
+  MongoPort: 20543
