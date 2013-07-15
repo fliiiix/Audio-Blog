@@ -1,0 +1,3 @@
+<a class="pull-right" style="margin-left: 10px;" href="/post/publish/<%= post.id %>"><%= (post.publish? ? "un" : "")%>publish</a>
+<a class="pull-right" style="margin-left: 10px;" href="/post/edit/<%= post.id %>">edit</a>
+<a class="pull-right" style="margin-left: 10px;" href="/post/delete/<%= post.id %>" onclick="return confirm('Are you sure?')">delete</a>
