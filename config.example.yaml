@@ -10,6 +10,8 @@ production:
   BlogTitel: Music Blog
   User: test
   Pass: ChangeMe
-  MongoUser: user
-  MongoPass: pass
-  MongoPort: 20543
+  Mongo:
+    Host: localhost
+    Port: 20543
+    User: user
+    Pass: pass
