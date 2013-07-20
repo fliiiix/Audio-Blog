@@ -8,7 +8,7 @@ post '/login/?' do
     session["isLogdIn"] = true
     redirect '/'
   else
-    "Username or Password incorrect"
+    erb :error401
   end
 end
 

@@ -1,8 +1,8 @@
 <div><%= @meldung %></div>
 <form action="/<%= @postId ? 'edit' : 'add' %>/text<%= '/' + @postId if @postId%>" method="post" class="pure-form">
   <h1>Write something</h1>
-  <input type="text" name="title" class="pure-input-1 mBottom" placeholder="Titel" value="<%= @title if @title %>">
+  <input type="text" name="title" class="pure-input-1 mBottom" placeholder="Title" value="<%= @title if @title %>">
   <textarea name="mdtext" class="pure-input-1 mBottom" rows="15"><%= @mdtext if @mdtext%></textarea>
-  <input type="submit" value="Speichern" id="submit" class="pure-button pure-button-primary pure-button-small pull-right">
+  <input type="submit" value="Save" id="submit" class="pure-button pure-button-primary pure-button-small pull-right">
 </form>
 <div style="clear:both; font-size:0px">&nbsp;</div>

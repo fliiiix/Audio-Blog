@@ -2,9 +2,9 @@
 <div><%= @meldung %></div>
 <form action="/<%= @postId ? 'edit' : 'add' %>/video<%= '/' + @postId if @postId%>" method="post" class="pure-form">
 	<h1>Share your Video</h1>
-	<input type="text" name="title" placeholder="Titel" value="<%= @title if @title %>" class="pure-input-1 mBottom">
+	<input type="text" name="title" placeholder="Title" value="<%= @title if @title %>" class="pure-input-1 mBottom">
 	<textarea name="mdtext" class="pure-input-1 mBottom" rows="15"><%= @mdtext if @mdtext%></textarea>
 	<input type="text" name="videolink" placeholder="YouTube Link" value="<%= @videolink if @videolink%>" class="pure-input-1 mBottom"><br>
-	<input type="submit" value="Speichern" id="submit" class="pure-button pure-button-primary pure-button-small pull-right">
+	<input type="submit" value="Save" id="submit" class="pure-button pure-button-primary pure-button-small pull-right">
 </form>
 <div style="clear:both; font-size:0px">&nbsp;</div>
