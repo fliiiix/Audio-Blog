@@ -28,7 +28,7 @@ get "/add/:element/?" do |element|
   erb :index
 end
 
-def GetPosts(page = 1, elementPerPage = 1)
+def GetPosts(page = 1, elementPerPage = 10)
   @pageId = page.to_i
   if admin?
     posts = Post.paginate({
