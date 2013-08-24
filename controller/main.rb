@@ -28,7 +28,7 @@ get "/add/:element/?" do |element|
   erb :index
 end
 
-def GetPosts(page = 1, elementPerPage = 10)
+def GetPosts(page = 1, elementPerPage = 1)
   @pageId = page.to_i
   if admin?
     posts = Post.paginate({
@@ -38,7 +38,12 @@ def GetPosts(page = 1, elementPerPage = 10)
       })
     @postPagesTotal = (Post.all.count / elementPerPage)
   else
-    posts = Post.where(:publish => true).sort(:created_at.desc) #MusicPost.all(:order => :created_at.desc) + Post.all(:order => :created_at.desc)
+    posts = Post.where(:publish => true).paginate({
+          :order => :created_at.desc,
+          :per_page => elementPerPage,
+          :page => page,
+      })
+    @postPagesTotal = (Post.all.count / elementPerPage)
   end
   return posts
 end

@@ -49,23 +49,27 @@
 <% end %>
 
 <% if @postPagesTotal != nil && @postPagesTotal > 1 %>
-  <div id="paging" class="block" style="margin-bottom:20px;">
-    <center>
-      <% if @pageId > 1 %>
-        <a href="/page/<%= @pageId -1 %>" class="pure-button"><i class="icon-arrow-left"></i> Back</a>
-      <% end %>
+      <div class="pagination pagination-centered">
+        <ul style="margin-bottom:20px;">
+          <% if @pageId > 1 %>
+            <li><a href="/page/<%= @pageId -1 %>">«</a></li>
+          <% else %>
+            <li class="disabled"><span>«</span></li>
+          <% end %>
 
-      <% (1..@postPagesTotal).each do |i| %>
-        <% if i != @pageId %>
-          <a href="/page/<%= i %>"><%= i %></a>
-        <% else %>
-          <span><%= i %></span>
-        <% end %>
-      <% end %>
-      
-      <% if @postPagesTotal > @pageId %>
-        <a href="/page/<%= @pageId + 1 %>" class="pure-button">Next <i class="icon-arrow-right"></i></a>
-      <% end %>
-    </center>
-  </div>
+          <% (1..@postPagesTotal).each do |i| %>
+            <% if i != @pageId %>
+              <li><a href="/page/<%= i %>"><%= i %></a></li>
+            <% else %>
+              <li class="disabled"><a href="" disabled><span><%= i %></span></a></li>
+            <% end %>
+          <% end %>
+          
+          <% if @postPagesTotal > @pageId %>
+            <li><a href="/page/<%= @pageId + 1 %>">»</a></li>
+          <% else %>
+            <li class="disabled"><a href="" disabled>»</a></li>
+          <% end %>
+        </ul>
+      </div>
 <% end %>
