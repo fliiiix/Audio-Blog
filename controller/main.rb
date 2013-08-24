@@ -245,8 +245,8 @@ get "/:name/?" do |name|
   url = Url.first(:nice => name)
   halt 404 if url == nil
   
-  if url.post != nil
-    @post = url.post
+  if url.respond_to?(:post_id)
+    @post = Post.find(url.post_id)
   end
 
   if url.respond_to?(:music_post_id)
@@ -257,7 +257,7 @@ get "/:name/?" do |name|
     @post = VideoPost.find(url.video_post_id)
   end
 
-  halt 404 if !admin? && @post.publish == false 
+  halt 404 if !admin? && @post == nil && @post.publish == false 
 
   erb :index
 end
