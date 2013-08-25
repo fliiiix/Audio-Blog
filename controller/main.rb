@@ -250,19 +250,16 @@ get "/:name/?" do |name|
   url = Url.first(:nice => name)
   halt 404 if url == nil
   
-  if url.respond_to?(:post_id)
+  if url.post_id != nil
     @post = Post.find(url.post_id)
-  end
-
-  if url.respond_to?(:music_post_id)
+  elsif url.respond_to?(:music_post_id)
     @post = MusicPost.find(url.music_post_id)
-  end
-  
-  if url.respond_to?(:video_post_id)
+  elsif url.respond_to?(:video_post_id)
     @post = VideoPost.find(url.video_post_id)
   end
-
-  halt 404 if !admin? && @post == nil && @post.publish == false 
+  
+  halt 404 if @post == nil
+  halt 404 if !admin? && @post.publish == false
 
   erb :index
 end
