@@ -103,7 +103,7 @@ class VideoPost < Post
   validate :isYouTubeLink
 
   def embedded()
-    '<iframe id="ytplayer" type="text/html" width="100%" height="410" src="http://www.youtube.com/embed/' + youtube_id(videoURL) + '" frameborder="0"></iframe>'
+    '<iframe id="ytplayer" type="text/html" width="100%" src="http://www.youtube.com/embed/' + youtube_id(videoURL) + '" frameborder="0"></iframe>'
   end
 
   def youtube_id(youtube_url)
