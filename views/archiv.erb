@@ -1,0 +1,21 @@
+<div class="block">
+	<h1>Archiv</h1>
+	<% if !@posts.blank? %>
+		<table class="pure-table pure-table-bordered" style="width:100%;">
+			<thead>
+				<th>Url</th>
+				<th>Datum</th>
+				<th>Typ</th>
+			</thead>
+			<% for item in @posts %>
+				<tr>
+					<td><a href="<%= item.url.nice %>"><%= item.title %></a></td>
+					<td><%= item.created_at.to_s %></td>
+					<td>Icon</td>
+				</tr>
+			<% end %>
+	  	</table>
+	<% else %>
+	  <p>Keine Items</p>
+	<% end %>
+</div>

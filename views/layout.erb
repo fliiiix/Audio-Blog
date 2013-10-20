@@ -10,30 +10,37 @@
   </head>
 
   <body class="<%= 'backgroundImage' if @loginPage%>">
-    <div class="pure-g-r">
-      <div class="header pure-u-1">
-          <div class="pure-menu pure-menu-open pure-menu-fixed pure-menu-horizontal">
-              <a class="pure-menu-heading" href="/"><%= AppConfig["BlogTitel"] %></a>
+    <div class="pure-menu pure-menu-open pure-menu-horizontal pure-menu-fixed">
+      <a href="/" class="pure-menu-heading"><%= AppConfig["BlogTitel"] %></a>
+      <ul>
+          <li class="<%= "pure-menu-selected" if !@aboutMenu %>"><a href="/">Home</a></li>
+          <li class="<%= "pure-menu-selected" if @aboutMenu %>"><a href="/about">About</a></li>
+          <li class=""><a href="/archiv">Archiv</a></li>
+      </ul>
 
-              <ul>
-                  <li class="<%= "pure-menu-selected" if !@aboutMenu %>"><a href="/">Home</a></li>
-                  <li class="<%= "pure-menu-selected" if @aboutMenu %>"><a href="/about">About</a></li>
-              </ul>
+      <ul class="pull-right login">
+        <% if admin? %>
+          <li><i class="icon-user"></i> Hi <%= AppConfig["User"] %></li>
+          <li><a href="/logout">Logout</a></li>
+        <% else %>
+          <li><a href="/login">Login</a></li>
+        <% end %>
+      </ul>
+    </div>
 
-              <ul class="pull-right login">
-                  <% if admin? %>
-                    <li><i class="icon-user"></i> Hi <%= AppConfig["User"] %></li>
-                    <li><a href="/logout">Logout</a></li>
-                  <% else %>
-                    <li><a href="/login">Login</a></li>
-                  <% end %>
-              </ul>
-          </div>
-      </div>
-
-        <div class="container pure-u">
-          <%= yield %>
+    <div class="banner" <%= "style='display:none'" if @loginPage %>>
+        <h1 class="banner-head">
+           <%= AppConfig["BlogTitel"] %>
+        </h1>
+        <div class="pull-right" style="margin-top:230px; background-color:rgba(102, 102, 102, 0.5); padding:10px; margin-right:20px; color:black;">
+          lol
         </div>
+    </div>
+
+    <div class="pure-g-r">
+      <div class="container pure-u-1">
+        <%= yield %>
+      </div>
     </div>
 
     <!-- Le javascript -->

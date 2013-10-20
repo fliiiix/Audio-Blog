@@ -13,6 +13,11 @@ get "/" do
   erb :index
 end
 
+get "/archiv/?" do
+  @posts = Post.where(:publish => true).sort(:created_at.desc)
+  erb :archiv
+end
+
 get "/page/?" do
   redirect "/"
 end
