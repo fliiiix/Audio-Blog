@@ -6,7 +6,7 @@ helpers do
 end
 
 configure :development do
-  AppConfig = YAML.load_file(File.expand_path("../config.yaml", File.dirname(__FILE__)))["development"]
+  AppConfig = Hash.new #YAML.load_file(File.expand_path("../config.yaml", File.dirname(__FILE__)))["development"]
   MongoMapper.database = 'music'
   set :show_exceptions, true
   set :views, Proc.new { File.join(root, "../views") }
@@ -19,6 +19,7 @@ configure :production do
   set :views, Proc.new { File.join(root, "../views") }
   set :public_folder, Proc.new { File.join(root, "../public") }
 
+  AppConfig = Hash.new
   AppConfig["BlogTitel"] = "Music Blog"
   AppConfig["User"] = ENV["APPUSER"]
   AppConfig["Pass"] = ENV["APPPASS"]
