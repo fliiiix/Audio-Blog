@@ -1,3 +1,5 @@
+language: ruby
+script: true
 deploy:
   provider: openshift
   user: l33tname@outlook.com
