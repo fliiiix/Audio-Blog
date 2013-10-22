@@ -5,7 +5,7 @@ deploy:
   user: l33tname@outlook.com
   password:
     secure: Srn3QmiV2Y5yvUxfgbD2rRvHkynzfnMjGqtLS+pmV7DB2JIHpwWVabEgbB/iPbAxXmKxxsGxChns68zOVEx24JtaH/j+nigwA5dmqxrHYeZyX8XoK+SVGll6YlzW4uEDXYSFomjjdJMomPx5Wk/w8OinV66U4lnFNAdsmakJcrU=
-  app: Audio-Blog
-  domain: l33tname.rhcloud.com
+  app: audioblog
+  domain: audioblog-l33tname.rhcloud.com
   on:
     repo: fliiiix/Audio-Blog
