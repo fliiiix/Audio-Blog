@@ -12,15 +12,19 @@ configure :development do
   set :views, Proc.new { File.join(root, "../views") }
   set :public_folder, Proc.new { File.join(root, "../public") }
   Debug = false
+  AppConfig["BlogTitel"] = "Music Blox"
 end
 
 configure :production do
-  AppConfig = YAML.load_file(File.expand_path("../config.yaml", File.dirname(__FILE__)))["production"]
   set :views, Proc.new { File.join(root, "../views") }
   set :public_folder, Proc.new { File.join(root, "../public") }
 
-  #MongoMapper.connection = Mongo::Connection.new(AppConfig["Mongo"]["Host"], AppConfig["Mongo"]["Port"].to_i)
-  MongoMapper.database = 'music'
-  #MongoMapper.database.authenticate(AppConfig["Mongo"]["User"], AppConfig["Mongo"]["Pass"])
+  AppConfig["BlogTitel"] = "Music Blog"
+  AppConfig["User"] = ENV["APPUSER"]
+  AppConfig["Pass"] = ENV["APPPASS"]
+
+  MongoMapper.connection = Mongo::Connection.new(ENV['OPENSHIFT_MONGODB_DB_HOST'], ENV['OPENSHIFT_MONGODB_DB_PORT'].to_i)
+  MongoMapper.database = ENV['OPENSHIFT_APP_NAME']
+  MongoMapper.database.authenticate(ENV['OPENSHIFT_MONGODB_DB_USERNAME'], ENV['OPENSHIFT_MONGODB_DB_PASSWORD'])
   Debug = false
 end
