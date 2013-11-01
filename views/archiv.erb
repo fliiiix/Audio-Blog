@@ -1,3 +1,4 @@
+<script type="text/javascript" src="/js/moment.js"></script>
 <div class="block">
 	<h1>Archiv</h1>
 	<% if !@posts.blank? %>
@@ -7,11 +8,19 @@
 				<th>Datum</th>
 				<th>Typ</th>
 			</thead>
-			<% for item in @posts %>
+			<% for post in @posts %>
 				<tr>
-					<td><a href="<%= item.url.nice %>"><%= item.title %></a></td>
-					<td><%= item.created_at.to_s %></td>
-					<td>Icon</td>
+					<td><a href="<%= post.url.nice %>"><%= post.title %></a></td>
+					<td>
+						<script type="text/javascript">
+							document.write(moment("<%= post.created_at.to_s.gsub(' UTC', '') %>").format('MMMM Do YYYY, h:mm:ss a'));
+						</script>
+					</td>
+					<td>
+						<%= '<i class="icon-pencil-2"></i>' if post._type == "Post" %>
+						<%= '<i class="icon-music"></i>' if post._type == "MusicPost" %>
+      					<%= '<i class="icon-camera"></i>' if post._type == "VideoPost" %>
+					</td>
 				</tr>
 			<% end %>
 	  	</table>

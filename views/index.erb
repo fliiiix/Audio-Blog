@@ -29,8 +29,7 @@
       <div style="clear:both;">
         <%= Maruku.new(post.text).to_html.byteslice(0, 1000) %>
       </div>
-      <%= post.embedded if post._type == "MusicPost" %>
-      <%= post.embedded if post._type == "VideoPost"%>
+      <%= post.embedded if post._type == "MusicPost" || post._type == "VideoPost" %>
       <a href="/<%= post.url.nice %>">read more</a>
     </div>
   <% end %>
@@ -43,8 +42,7 @@
     <div class="clear">
       <%= Maruku.new(@post.text).to_html%>
     </div>
-    <%= @post.embedded if @post._type == "MusicPost" %>
-    <%= @post.embedded if @post._type == "VideoPost"%>
+    <%= @post.embedded if @post._type == "MusicPost" || @post._type == "VideoPost" %>
   </div>
 <% end %>
 
