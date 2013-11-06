@@ -77,6 +77,30 @@ post "/edit/about/?" do
   end
 end
 
+get "/addsocial" do
+  protected!
+  Social.new(:key => "facebook").save
+  Social.new(:key => "youtube").save
+  Social.new(:key => "gplus").save
+  Social.new(:key => "flattr").save
+  redirect "/social"
+end
+
+get "/social/?" do
+  protected!
+  erb :addSocialMedia, locals: {social: Social.all, saved: false}
+end
+
+post "/social/?" do
+  protected!
+  for account in params
+    s = Social.first(:key => account[0]) == nil ? Social.new(:key => account[0]) : Social.first(:key => account[0])
+    s.url = account[1]
+    s.save!
+  end
+  erb :addSocialMedia, locals: {social: Social.all, saved: true}
+end
+
 post "/add/text/?" do
   protected!
   post = Post.new(:title => params[:title], 
@@ -153,7 +177,7 @@ get "/auth/?" do
                           :redirect_uri => AppConfig["SoundcloudRedirecURL"])
 
   # redirect user to authorize URL
-  puts client.authorize_url()
+  #puts client.authorize_url()
   redirect client.authorize_url()
 end
 

@@ -13,9 +13,10 @@
     <div class="pure-menu pure-menu-open pure-menu-horizontal pure-menu-fixed">
       <a href="/" class="pure-menu-heading"><%= AppConfig["BlogTitel"] %></a>
       <ul>
-          <li class="<%= "pure-menu-selected" if !@aboutMenu %>"><a href="/">Home</a></li>
-          <li class="<%= "pure-menu-selected" if @aboutMenu %>"><a href="/about">About</a></li>
-          <li class=""><a href="/archiv">Archiv</a></li>
+          <li class="pure-menu-item <%= "pure-menu-selected" if !@aboutMenu %>"><a href="/">Home</a></li>
+          <li class="pure-menu-item <%= "pure-menu-selected" if @aboutMenu %>"><a href="/about">About</a></li>
+          <li class="pure-menu-item"><a href="/archiv">Archiv</a></li>
+          <%= '<li class="pure-menu-item"><a href="/social">Social</a></li>' if admin? %>
       </ul>
 
       <ul class="pull-right login">
@@ -33,7 +34,13 @@
            <%= AppConfig["BlogTitel"] %>
         </h1>
         <div class="pull-right" style="margin-top:230px; background-color:rgba(102, 102, 102, 0.5); padding:10px; margin-right:20px; color:black;">
-          lol
+          <% if !Social.all.blank? %>
+            <% for account in Social.all %>
+              <a href="<%= account.url %>" target="_blank"><img src="/img/social/<%= account.key %>.png"></a>
+            <% end %>
+          <% else %>
+            
+          <% end %>
         </div>
     </div>
 

@@ -4,6 +4,13 @@ require "fileutils"
 require "soundcloud"
 require "uri"
 
+class Social
+  include MongoMapper::Document
+
+  key :key, String
+  key :url, String
+end
+
 class About
   include MongoMapper::Document
 

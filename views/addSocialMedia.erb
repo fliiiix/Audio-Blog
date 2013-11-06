@@ -1,0 +1,19 @@
+<div class="block">
+	<%= "<aside>Saved!</aside>" if saved %>
+	<h1>Social Media Accounts</h1>
+	
+		<% if !social.blank? %>
+		<form class="pure-form pure-form-aligned" action="/social" method="post">
+			<% for account in social %>
+				<div class="pure-control-group">
+					<img src="/img/social/<%= account.key %>.png" alt="<%= account.key %>" title="<%= account.key %>" class="img-social">
+					<input type="text" name="<%= account.key %>" class="pure-input-2-3" value="<%= account.url %>">
+				</div>
+			<% end %>
+		  	<button type="submit"class="pure-button pure-button-primary">save</button>
+		</form>
+		<% else %>
+		  <p>No accounts!</p>
+		  <a href="/addsocial">Start</a>
+		<% end %>
+</div>
