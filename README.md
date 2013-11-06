@@ -5,6 +5,15 @@ Audio-Blog
 ~ in work ~
 #The Config
 
+cat envVAR.sh
+<pre>
+#!/bin/bash
+echo start
+export APPUSER="User"
+export APPPASS="1234"
+echo end
+</pre>
+
 ###Environment 
 The :environment defaults to the value of the RACK_ENV environment variable (ENV['RACK_ENV']), or :development when no RACK_ENV environment variable is set. You can configure different values for development and production.
 
