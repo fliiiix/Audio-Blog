@@ -11,6 +11,8 @@ cat envVAR.sh
 echo start
 export APPUSER="User"
 export APPPASS="1234"
+export SCID="xxxx"
+export SCSECRET="xxxx"
 echo end
 </pre>
 
