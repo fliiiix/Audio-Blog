@@ -4,7 +4,7 @@ deploy:
   provider: openshift
   user: l33tname@outlook.com
   password:
-    secure: Srn3QmiV2Y5yvUxfgbD2rRvHkynzfnMjGqtLS+pmV7DB2JIHpwWVabEgbB/iPbAxXmKxxsGxChns68zOVEx24JtaH/j+nigwA5dmqxrHYeZyX8XoK+SVGll6YlzW4uEDXYSFomjjdJMomPx5Wk/w8OinV66U4lnFNAdsmakJcrU=
+    secure: NcPkXoyuxSwwflbs2Dwl+a0/uT/D86p93w0Gc+qactYpTGl0rb/hcF6r9Lv/s5HWHfZnZY/M3AYYOz6DDiFYzQC3+u4SUtu5uwnYWKcKTazv3xy6xcAbgRkiriRgx+B1+FEAShTPvS9Svq39wTU85cv6K8AgXO1UUrUMa6mz+wc=
   app: audioblog
   domain: l33tname
   on:
