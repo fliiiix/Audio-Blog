@@ -16,6 +16,8 @@ export SCSECRET="xxxx"
 echo end
 </pre>
 
+chmod +x envVAR.sh
+
 ###Environment 
 The :environment defaults to the value of the RACK_ENV environment variable (ENV['RACK_ENV']), or :development when no RACK_ENV environment variable is set. You can configure different values for development and production.
 
