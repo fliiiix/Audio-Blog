@@ -3,7 +3,7 @@ deploy:
   provider: openshift
   user: l33tname@outlook.com
   password:
-    secure: h/25BRraWt0eX7rulGh8sg0GRy5Mw+Usr1QqUvZsCChypyCyaXl2iwRJJFi55MT1rBGMoDoBgGhzz9TvaJqmegyTOYnIO/w1FrrMzHj87uiWq0i006qmeNJug4ONTE3CqSW20pNgo4vE5PDNmasU4KSRhaw0b9Wy0OPZCdyLkhs=
+    secure: hynlswjwK9D62Z02TcWB9qQDHvx5hyF4rTuRz65PMPSIKuRCdbjGbrSAZlrdzwD3SzHBP7V3fU1Ku/euqElGzlenETNELE/LtCXLxgKUqwq4lzL5X1ljuyA3KD97ex2eFjcdCCur7YzgzAYSbRr9rGl5dHZtn68zOC89yJ0mACM=
   app: audio
   domain: l33tname
   on:
