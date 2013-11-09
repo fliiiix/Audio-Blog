@@ -1,11 +1,10 @@
-language: ruby
 script: true
 deploy:
   provider: openshift
   user: l33tname@outlook.com
   password:
-    secure: NcPkXoyuxSwwflbs2Dwl+a0/uT/D86p93w0Gc+qactYpTGl0rb/hcF6r9Lv/s5HWHfZnZY/M3AYYOz6DDiFYzQC3+u4SUtu5uwnYWKcKTazv3xy6xcAbgRkiriRgx+B1+FEAShTPvS9Svq39wTU85cv6K8AgXO1UUrUMa6mz+wc=
-  app: audioblog
+    secure: MRqyvfV8WdEEGALfepaBh9UhsE8n9FVBniSOdct+en1pSeSsFRpSad5mmIzHR2ZMLkixvXH7eb/lOIIQOGAxvmoKPsfWE+76NjQVCBvdUOgjv+WRrQHYlfRWFTjG9J5Kaslnfmaqw4cAFG+HYbamMYh2UGVhIg+aMEzlJPa9skY=
+  app: audio
   domain: l33tname
   on:
     repo: fliiiix/Audio-Blog
