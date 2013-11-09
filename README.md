@@ -5,7 +5,7 @@ Audio-Blog
 ~ in work ~
 #The Config
 
-cat envVAR.sh
+cat £OPENSHIFT_DATA_DIR/envVAR.sh
 <pre>
 #!/bin/bash
 echo start
