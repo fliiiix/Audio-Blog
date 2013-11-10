@@ -49,7 +49,7 @@ class MusicPost < Post
   before_validation :uploadToSoundCloud
 
   def embedded()
-    '<iframe id="sc-widget" src="https://w.soundcloud.com/player/?url=' + soundCloudUrl + '&auto_play=false&auto_advance=true&buying=false&liking=false&download=true&sharing=false&show_artwork=true&show_comments=false&show_playcount=false&show_user=true&start_track=0" width="100%" height="166" scrolling="no" frameborder="no"></iframe>'
+    '<iframe id="sc-widget" src="https://w.soundcloud.com/player/?url=' + soundCloudUrl + '&auto_play=false&auto_advance=true&buying=false&liking=false&download=true&sharing=true&show_artwork=true&show_comments=false&show_playcount=false&show_user=true&start_track=0" width="100%" height="166" scrolling="no" frameborder="no"></iframe>'
   end
 
   private

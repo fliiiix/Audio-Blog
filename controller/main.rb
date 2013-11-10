@@ -3,6 +3,7 @@ require "sinatra"
 require "soundcloud"
 require "yaml"
 require "maruku"
+require "builder"
 require_relative "model.rb"
 require_relative "config.rb"
 require_relative "error.rb"
@@ -11,6 +12,11 @@ require_relative "login.rb"
 get "/" do
   @posts = GetPosts()
   erb :index
+end
+
+get "/rss/?" do
+  @posts = Post.where(:publish => true).sort(:created_at.desc)
+  builder :rss, locals: {title: "Audio Blog", description: "Bla", baseUrl: request.base_url}
 end
 
 get "/archiv/?" do
