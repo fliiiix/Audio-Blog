@@ -12,7 +12,6 @@ configure :development do
   set :views, Proc.new { File.join(root, "../views") }
   set :public_folder, Proc.new { File.join(root, "../public") }
   Debug = true
-  AppConfig["BlogTitel"] = "Music Blox"
 end
 
 configure :production do

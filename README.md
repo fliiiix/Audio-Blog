@@ -10,6 +10,7 @@ production:
   SoundCloudClientId: xxx
   SoundCloudClientSecret: xxx
   BlogTitel: Music Blog
+  Description: Bla bla bla
   User: test
   Pass: ChangeMe
 

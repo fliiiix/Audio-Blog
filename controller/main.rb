@@ -16,7 +16,7 @@ end
 
 get "/rss/?" do
   @posts = Post.where(:publish => true).sort(:created_at.desc)
-  builder :rss, locals: {title: "Audio Blog", description: "Bla", baseUrl: request.base_url}
+  builder :rss, locals: {title: AppConfig["BlogTitel"], description: AppConfig["Description"], baseUrl: request.base_url}
 end
 
 get "/archiv/?" do
