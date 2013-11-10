@@ -19,9 +19,7 @@ configure :production do
   set :views, Proc.new { File.join(root, "../views") }
   set :public_folder, Proc.new { File.join(root, "../public") }
 
-  AppConfig = YAML.load_file(File.expand_path("config.yaml", ENV["$OPENSHIFT_DATA_DIR"]))["production"]
-
-  puts File.expand_path("config.yaml", ENV["$OPENSHIFT_DATA_DIR"])
+  AppConfig = YAML.load_file(File.expand_path("config.yaml", ENV["OPENSHIFT_DATA_DIR"]))["production"]
 
   MongoMapper.connection = Mongo::Connection.new(ENV["OPENSHIFT_MONGODB_DB_HOST"], ENV["OPENSHIFT_MONGODB_DB_PORT"].to_i)
   MongoMapper.database = ENV["OPENSHIFT_APP_NAME"]
