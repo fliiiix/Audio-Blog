@@ -5,26 +5,13 @@ Audio-Blog
 ~ in work ~
 #The Config
 
-cat $OPENSHIFT_DATA_DIR/envVAR.sh
-<pre>
-#!/bin/bash
-echo add secure VAR ....
-
-echo APPUSER
-export APPUSER="test"
-
-echo APPPASS
-export APPPASS="pass"
-
-echo SCID
-export SCID="xxxx"
-
-echo SCSECRET
-export SCSECRET="xxxx"
-echo end
-</pre>
-
-chmod +x envVAR.sh
+cat $OPENSHIFT_DATA_DIR/config.yaml
+production:
+  SoundCloudClientId: xxx
+  SoundCloudClientSecret: xxx
+  BlogTitel: Music Blog
+  User: test
+  Pass: ChangeMe
 
 ###Environment 
 The :environment defaults to the value of the RACK_ENV environment variable (ENV['RACK_ENV']), or :development when no RACK_ENV environment variable is set. You can configure different values for development and production.
