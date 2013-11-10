@@ -5,13 +5,21 @@ Audio-Blog
 ~ in work ~
 #The Config
 
-cat £OPENSHIFT_DATA_DIR/envVAR.sh
+cat $OPENSHIFT_DATA_DIR/envVAR.sh
 <pre>
 #!/bin/bash
-echo start
-export APPUSER="User"
-export APPPASS="1234"
+echo add secure VAR ....
+
+echo APPUSER
+export APPUSER="test"
+
+echo APPPASS
+export APPPASS="pass"
+
+echo SCID
 export SCID="xxxx"
+
+echo SCSECRET
 export SCSECRET="xxxx"
 echo end
 </pre>
