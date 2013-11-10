@@ -4,7 +4,7 @@ deploy:
   user: l33tname@outlook.com
   password:
     secure: hynlswjwK9D62Z02TcWB9qQDHvx5hyF4rTuRz65PMPSIKuRCdbjGbrSAZlrdzwD3SzHBP7V3fU1Ku/euqElGzlenETNELE/LtCXLxgKUqwq4lzL5X1ljuyA3KD97ex2eFjcdCCur7YzgzAYSbRr9rGl5dHZtn68zOC89yJ0mACM=
-  app: audio
+  app: audioblog
   domain: l33tname
   on:
     repo: fliiiix/Audio-Blog
