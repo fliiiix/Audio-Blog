@@ -34,13 +34,16 @@
            <%= AppConfig["BlogTitel"] %>
         </h1>
         <div class="pull-right" style="margin-top:230px; background-color:rgba(102, 102, 102, 0.5); padding:10px; margin-right:20px; color:black;">
-          <% if !Social.all.blank? %>
-            <% for account in Social.all %>
-              <a href="<%= account.url %>" target="_blank"><img src="/img/social/<%= account.key %>.png"></a>
+
+          <% if !AppConfig["Social"].blank? %>
+            <% for account in AppConfig["Social"] %>
+              <% s = Social.find_by_key(account); if s != nil && s.url != "" %>
+                <a href="<%= s.url %>" target="_blank"><img src="/img/social/<%= account %>.png"></a>
+              <% end %>
             <% end %>
-          <% else %>
-            
+          <% else %>  
           <% end %>
+          <a href="/rss"><img src="/img/social/rss.png"></a>
         </div>
     </div>
 

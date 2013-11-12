@@ -83,18 +83,9 @@ post "/edit/about/?" do
   end
 end
 
-get "/addsocial" do
-  protected!
-  Social.new(:key => "facebook").save
-  Social.new(:key => "youtube").save
-  Social.new(:key => "gplus").save
-  Social.new(:key => "flattr").save
-  redirect "/social"
-end
-
 get "/social/?" do
   protected!
-  erb :addSocialMedia, locals: {social: Social.all, saved: false}
+  erb :addSocialMedia, locals: {social: AppConfig["Social"], saved: false}
 end
 
 post "/social/?" do
@@ -104,7 +95,7 @@ post "/social/?" do
     s.url = account[1]
     s.save!
   end
-  erb :addSocialMedia, locals: {social: Social.all, saved: true}
+  erb :addSocialMedia, locals: {social: AppConfig["Social"], saved: true}
 end
 
 post "/add/text/?" do

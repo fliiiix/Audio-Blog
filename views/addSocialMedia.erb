@@ -6,14 +6,14 @@
 		<form class="pure-form pure-form-aligned" action="/social" method="post">
 			<% for account in social %>
 				<div class="pure-control-group">
-					<img src="/img/social/<%= account.key %>.png" alt="<%= account.key %>" title="<%= account.key %>" class="img-social">
-					<input type="text" name="<%= account.key %>" class="pure-input-2-3" value="<%= account.url %>">
+					<img src="/img/social/<%= account %>.png" alt="<%= account %>" title="<%= account %>" class="img-social">
+					<input type="text" name="<%= account %>" class="pure-input-2-3" value="<%= Social.find_by_key(account) != nil ? Social.find_by_key(account).url : '' %>">
 				</div>
 			<% end %>
 		  	<button type="submit"class="pure-button pure-button-primary">save</button>
 		</form>
 		<% else %>
 		  <p>No accounts!</p>
-		  <a href="/addsocial">Start</a>
+		  <p>Add the icon to the public/img/social folder and the name in your config file</p>
 		<% end %>
 </div>
