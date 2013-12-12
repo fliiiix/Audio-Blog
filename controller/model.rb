@@ -89,6 +89,7 @@ class MusicPost < Post
       begin
         track = client.post('/tracks', :track => {
           :title => fileName,
+          :downloadable => true,
           :asset_data => File.new(path, 'rb')
         })
         self[:soundCloudUrl] = track.permalink_url

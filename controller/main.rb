@@ -174,7 +174,7 @@ get "/auth/?" do
                           :redirect_uri => AppConfig["SoundcloudRedirecURL"])
 
   # redirect user to authorize URL
-  #puts client.authorize_url()
+  puts client.authorize_url()
   redirect client.authorize_url()
 end
 
