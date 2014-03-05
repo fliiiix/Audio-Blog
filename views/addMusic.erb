@@ -3,7 +3,9 @@
 <form action="/<%= @postId ? 'edit' : 'add' %>/music<%= '/' + @postId if @postId%>" method="post" enctype="multipart/form-data" class="pure-form">
 	<h1>Add a Song</h1>
 	<input type="text" name="title" placeholder="Title" value="<%= @title if @title %>" class="pure-input-1 mBottom" required />
-	<textarea name="mdtext" rows="15" class="pure-input-1 mBottom" required><%= @mdtext if @mdtext %></textarea>
+	<textarea id="text-input" name="mdtext" rows="15" class="pure-input-1 mBottom" required oninput="this.editor.update()"><%= @mdtext if @mdtext %></textarea>
+	<b>Preview:</b>
+  <div id="preview"></div>
 	
 	<div id="selectedFileDiv" class="pure-button fileContainer pull-left" style="display:none;">
 		<i class="icon-cancel" onclick="selectNewFile();"></i>
@@ -19,3 +21,16 @@
 	<input type="submit" value="Save" id="submit" class="pure-button pure-button-primary pure-button-small pull-right">
 </form>
 <div style="clear:both; font-size:0px">&nbsp;</div>
+
+<script src="/js/markdown.js"></script>
+<script>
+  function Editor(input, preview) {
+    this.update = function () {
+      preview.innerHTML = markdown.toHTML(input.value);
+    };
+    input.editor = this;
+    this.update();
+  }
+  var $ = function (id) { return document.getElementById(id); };
+  new Editor($("text-input"), $("preview"));
+</script>

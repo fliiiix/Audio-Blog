@@ -2,7 +2,22 @@
 <form action="/<%= @postId ? 'edit' : 'add' %>/text<%= '/' + @postId if @postId%>" method="post" class="pure-form">
   <h1>Write something</h1>
   <input type="text" name="title" class="pure-input-1 mBottom" placeholder="Title" value="<%= @title if @title %>" required>
-  <textarea name="mdtext" class="pure-input-1 mBottom" rows="15" required><%= @mdtext if @mdtext%></textarea>
+  <textarea id="text-input" name="mdtext" class="pure-input-1 mBottom" rows="15" required oninput="this.editor.update()"><%= @mdtext if @mdtext%></textarea>
+  <b>Preview:</b>
+  <div id="preview"></div>
   <input type="submit" value="Save" id="submit" class="pure-button pure-button-primary pure-button-small pull-right">
 </form>
 <div style="clear:both; font-size:0px">&nbsp;</div>
+
+<script src="/js/markdown.js"></script>
+<script>
+  function Editor(input, preview) {
+    this.update = function () {
+      preview.innerHTML = markdown.toHTML(input.value);
+    };
+    input.editor = this;
+    this.update();
+  }
+  var $ = function (id) { return document.getElementById(id); };
+  new Editor($("text-input"), $("preview"));
+</script>
