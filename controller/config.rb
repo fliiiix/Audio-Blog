@@ -27,6 +27,8 @@ configure :production do
 end
 
 configure :test do
+  MongoMapper.database = 'TestMusic'
+  AppConfig = Hash.new
   AppConfig["BlogTitel"] = ""
   AppConfig["Description"] = ""
   AppConfig["User"] = ""

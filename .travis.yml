@@ -1,6 +1,8 @@
 language: ruby
 rvm:
   - 2.0.0
+services:
+  - mongodb
 deploy:
   provider: openshift
   user: l33tname@outlook.com

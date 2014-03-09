@@ -1,6 +1,7 @@
 require 'test/unit'
 require 'rack/test'
 
+ENV['RACK_ENV'] = 'test'
 OUTER_APP = Rack::Builder.parse_file('config.ru').first
 
 class SmokeTest < Test::Unit::TestCase
