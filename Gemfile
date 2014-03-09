@@ -7,3 +7,8 @@ gem "bson_ext"
 gem "soundcloud"
 gem "maruku"
 gem "builder"
+
+group :test do
+  gem 'rack-test'
+  gem 'test-unit'
+end
