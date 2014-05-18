@@ -9,7 +9,7 @@ configure do
   set :views, Proc.new { File.join(root, "../views") }
   set :public_folder, Proc.new { File.join(root, "../public") }
 
-  Debug = true
+  Debug = false
 end
 
 configure :development do
