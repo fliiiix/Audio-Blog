@@ -285,11 +285,13 @@ get "/:name/?" do |name|
   begin
     @post = MusicPost.find(url.music_post_id) if @post == nil
   rescue Exception => e
+    @post = nil
   end
 
   begin
     @post = VideoPost.find(url.video_post_id) if @post == nil
   rescue Exception => e
+    @post = nil
   end
 
   halt 404 if @post == nil
