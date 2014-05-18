@@ -39,7 +39,7 @@ get "/add/:element/?" do |element|
   erb :index
 end
 
-def GetPosts(page = 1, elementPerPage = 10)
+def GetPosts(page = 1, elementPerPage = 15)
   @pageId = page.to_i
   if admin?
     posts = Post.paginate({
@@ -273,19 +273,27 @@ get "/id/:id/?" do |id|
 end
 
 get "/:name/?" do |name|
+  @post = nil
+
   url = Url.first(:nice => name)
   halt 404 if url == nil
-  
+
   if url.post_id != nil
     @post = Post.find(url.post_id)
-  elsif url.respond_to?(:music_post_id)
-    @post = MusicPost.find(url.music_post_id)
-  elsif url.respond_to?(:video_post_id)
-    @post = VideoPost.find(url.video_post_id)
   end
-  
+   
+  begin
+    @post = MusicPost.find(url.music_post_id) if @post == nil
+  rescue Exception => e
+  end
+
+  begin
+    @post = VideoPost.find(url.video_post_id) if @post == nil
+  rescue Exception => e
+  end
+
   halt 404 if @post == nil
   halt 404 if !admin? && @post.publish == false
-
+   
   erb :index
 end
