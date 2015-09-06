@@ -36,6 +36,10 @@ class Post
 
   one :url
   timestamps!
+
+  def created_at_formated()
+    created_at.strftime("%d %B %Y, %H:%M %p")
+  end
 end
 
 class MusicPost < Post
