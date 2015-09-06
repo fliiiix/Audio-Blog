@@ -14,7 +14,30 @@ production:
   Description: Bla bla bla
   User: test
   Pass: ChangeMe
+  Social: ["500px", "facebook", "flattr", "flicker"]
 ```
+
+**Social**
+Possible values are:
+
+* 500px
+* github
+* mail
+* stackoverflow
+* youtube
+* facebook
+* gplus
+* tent
+* flattr
+* identica
+* soundclick
+* tumblr
+* flickr
+* mail2
+* stackoverflow2
+* twitter
+
+
 
 ###Environment 
 The :environment defaults to the value of the RACK_ENV environment variable (ENV['RACK_ENV']), or :development when no RACK_ENV environment variable is set. You can configure different values for development and production.
