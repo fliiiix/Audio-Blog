@@ -10,6 +10,7 @@ cat $OPENSHIFT_DATA_DIR/config.yaml
 production:
   SoundCloudClientId: xxx
   SoundCloudClientSecret: xxx
+  SoundcloudRedirecURL: http://localhost:9292/authPoint
   BlogTitel: Music Blog
   Description: Bla bla bla
   User: test
