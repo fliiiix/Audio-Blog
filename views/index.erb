@@ -59,14 +59,14 @@
             <% if i != @pageId %>
               <li><a href="/page/<%= i %>"><%= i %></a></li>
             <% else %>
-              <li class="disabled"><a href="" disabled><span><%= i %></span></a></li>
+              <li class="disabled"><span><%= i %></span></li>
             <% end %>
           <% end %>
           
           <% if @postPagesTotal > @pageId %>
             <li><a href="/page/<%= @pageId + 1 %>">»</a></li>
           <% else %>
-            <li class="disabled"><a href="" disabled>»</a></li>
+            <li class="disabled"><span>»</span></li>
           <% end %>
         </ul>
       </div>

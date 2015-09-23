@@ -1,4 +1,3 @@
-<script type="text/javascript" src="/js/moment.js"></script>
 <div class="block">
 	<h1>Archiv</h1>
 	<% if !@posts.blank? %>
@@ -12,9 +11,7 @@
 				<tr>
 					<td><a href="<%= post.url.nice %>"><%= post.title %></a></td>
 					<td>
-						<script type="text/javascript">
-							document.write(moment("<%= post.created_at.to_s.gsub(' UTC', '') %>").format('MMMM Do YYYY, h:mm:ss a'));
-						</script>
+						<%= post.created_at_formated %>
 					</td>
 					<td>
 						<%= '<i class="icon-pencil-2"></i>' if post._type == "Post" %>
