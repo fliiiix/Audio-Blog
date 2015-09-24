@@ -63,7 +63,7 @@ Copyright (c) Nicolas Gallagher and Jonathan Neal
 .icon-box-remove:before {content: "\e00a";}
 /*custome style*/
 @media all and (max-width: 399px){.login {display: none !important;}}
-body {padding-top: 60px; background-color: rgb(238, 236, 238);}
+body {padding-top: 60px; background-color: rgb(225, 225, 225);}
 a, a:hover, a:visited {color: #3B8BBA; text-decoration: none;}
 aside { background: none repeat scroll 0 0 #1F8DD6; border-radius: 3px 3px 3px 3px; padding: 0.3em 1em;}
 .block {float:none; background-color: white; padding: 20px; margin-bottom:35px; margin-left:auto; margin-right:auto; }
