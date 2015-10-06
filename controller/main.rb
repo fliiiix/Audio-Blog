@@ -123,9 +123,13 @@ post "/add/music/?" do
   if params[:soundSample] != nil
     filename = params[:soundSample][:filename]
     filepath = params[:soundSample][:tempfile].to_path
+    soundcloudurl = nil
+    soundcloudId = nil
   else
     filename = ""
     filepath = ""
+    soundcloudurl = params[:soundCloudUrl]
+    soundcloudId = -1
   end
   
   post = MusicPost.new(:title => params[:title],
@@ -133,6 +137,8 @@ post "/add/music/?" do
                        :publish => AppConfig["Status"],
                        :fileName => filename,
                        :filePath => filepath,
+                       :soundCloudUrl => soundcloudurl,
+                       :soundCloudId => soundcloudId,
                        :url => Url.new(:nice => params[:title]))
   if post.save
     redirect "/"
@@ -141,6 +147,7 @@ post "/add/music/?" do
   @meldung = "Error(s): " + post.errors.map {|k,v| "#{k}: #{v}"}.to_s
   @title = params[:title]
   @mdtext = params[:mdtext]
+  @soundCloudUrl = params[:soundCloudUrl]
   @element = "music"
 
   @posts = GetPosts()
