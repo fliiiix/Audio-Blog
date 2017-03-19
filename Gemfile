@@ -1,10 +1,11 @@
 source 'https://rubygems.org'
-ruby '2.2.3'
 
 gem "rake"
 gem "puma"
 gem "sinatra"
 gem "mongo_mapper"
+gem "activemodel-serializers-xml"
+gem "active_model_serializers"
 gem "bson_ext"
 gem "soundcloud"
 gem "maruku"

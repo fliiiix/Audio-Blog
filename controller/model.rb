@@ -1,5 +1,6 @@
 # encoding: UTF-8
 require "mongo_mapper"
+require "activemodel-serializers-xml"
 require "fileutils"
 require "soundcloud"
 require "uri"
