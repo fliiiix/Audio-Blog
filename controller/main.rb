@@ -18,19 +18,23 @@ get "/" do
   erb :about 
 end
 
+get "/deals/?" do
+  @about = Deals.order(:created_at).last
+  erb :about 
+end
+
 get "/blog/?" do
   @posts = GetPosts()
-  puts AppConfig["Social"]
   erb :index
 end
 
 get "/rss/?" do
-  @posts = Post.where(:publish => true).sort(:created_at.desc)
+  @posts = Post.where(:publish => true).reverse(:created_at)
   builder :rss, locals: {title: AppConfig["BlogTitel"], description: AppConfig["Description"], baseUrl: request.base_url}
 end
 
 get "/archiv/?" do
-  @posts = Post.where(:publish => true).sort(:created_at.desc)
+  @posts = Post.where(:publish => true).reverse(:created_at)
   erb :archiv
 end
 
@@ -52,32 +56,24 @@ end
 def GetPosts(page = 1, elementPerPage = 15)
   @pageId = page.to_i
   if admin?
-    posts = Post.paginate({
-          :order => :created_at.desc,
-          :per_page => elementPerPage,
-          :page => page,
-      })
+    posts = Post.reverse(:created_at).paginate(elementPerPage, page)
     @postPagesTotal = (Post.all.count / elementPerPage)
   else
-    posts = Post.where(:publish => true).paginate({
-          :order => :created_at.desc,
-          :per_page => elementPerPage,
-          :page => page,
-      })
+    posts = Post.where(:publish => true).reverse(:created_at).paginate(elementPerPage, page)
     @postPagesTotal = (Post.all.count / elementPerPage)
   end
   return posts
 end
 
 get "/about/?" do
-  @about = About.last(:order => :created_at.asc)
+  @about = About.order(:created_at).last
   @aboutMenu = true
   erb :about 
 end
 
 get "/edit/about/?" do
   protected!
-  @about = About.last(:order => :created_at.asc)
+  @about = About.order(:created_at).last
   erb :aboutEdit
 end
 
@@ -103,7 +99,8 @@ post "/social/?" do
   for account in params
     s = Social.first(:key => account[0]) == nil ? Social.new(:key => account[0]) : Social.first(:key => account[0])
     s.url = account[1]
-    s.save!
+    s.position = 0
+    s.save
   end
   erb :addSocialMedia, locals: {social: AppConfig["Social"], saved: true}
 end

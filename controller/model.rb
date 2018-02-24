@@ -4,6 +4,9 @@ require "soundcloud"
 require "uri"
 
 Sequel::Model.plugin :timestamps
+Sequel.extension :pagination
+
+DB.extension(:pagination)
 
 # Social icons
 DB.create_table? :social do
@@ -27,6 +30,19 @@ DB.create_table? :aboutPage do
 end
 
 class About < Sequel::Model(:aboutPage)
+end
+
+
+# deals text
+DB.create_table? :dealsPage do
+  primary_key :id
+  String :text
+
+  DateTime :created_at
+  DateTime :updated_at
+end
+
+class Deals < Sequel::Model(:dealsPage)
 end
 
 
