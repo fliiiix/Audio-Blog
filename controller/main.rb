@@ -5,13 +5,15 @@ require "yaml"
 require "maruku"
 require "builder"
 require "tilt/erb"
-require_relative "model.rb"
+require "mysql2"
+require "sequel"
 require_relative "config.rb"
+require_relative "model.rb"
 require_relative "error.rb"
 require_relative "login.rb"
 
 get "/" do
-  @about = About.last(:order => :created_at.asc)
+  @about = About.order(:created_at).last
   @aboutMenu = true
   erb :about 
 end

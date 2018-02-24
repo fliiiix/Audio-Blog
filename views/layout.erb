@@ -22,9 +22,9 @@
             <%= '<div class="navigation-item"><a class="nav-unselected" href="/social">Social</a></div>' if admin? %>
             <div class="quick-links">
 
-                <% if !AppConfig["Social"].blank? %>
+                <% if !AppConfig["Social"].empty? %>
                     <% for account in AppConfig["Social"] %>
-                      <% s = Social.find_by_key(account); if s != nil && s.url != "" && s != "Location" && s != "Whatsapp" %>
+                      <% s = Social.detect {|e| e == account}; if s != nil && s.url != "" && s.position == 0 %>
                         <div class="icon">
                             <a href="<%= s.url %>" target="_blank"><img src="/img/social/<%= account %>.png"></a>
                         </div>
@@ -47,14 +47,19 @@
 
     <div class="footer">
         <div class="inner-footer">
-            <div class="icon">
+            <!--<div class="icon">
                 <img src="/img/social/Location.png">
             </div>
             <p>Schulstrasse, 6340 Baar</p>
             <div class="icon">
                 <img src="/img/social/Whatsapp.png">
             </div>
-            <p style="margin-top: 30px;"><%= Social.find_by_key("Whatsapp").url %></p>
+            <p style="margin-top: 30px;"><%#= Social.find_by_key("Whatsapp").url %></p>-->
+            <% s = Social.detect {|e| e == account}; if s != nil && s.url != "" && s.position == 1 %>
+                <div class="icon">
+                    <img src="/img/social/<%= account %>.png">
+                </div>
+            <% end %>
         </div>
     </div>
     

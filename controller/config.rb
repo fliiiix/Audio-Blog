@@ -14,7 +14,7 @@ end
 
 configure :development do
   AppConfig = YAML.load_file(File.expand_path("../config.yaml", File.dirname(__FILE__)))["development"]
-  MongoMapper.database = 'music'
+  DB = Sequel.sqlite
   set :show_exceptions, true
   Debug = true
 end
@@ -22,13 +22,13 @@ end
 configure :production do
   AppConfig = YAML.load_file(File.expand_path("../config.yaml", File.dirname(__FILE__)))["production"]
 
-  # mongodb://user:pass@host:port/dbname
-  MongoMapper.setup({'production' => {'uri' => ENV['MONGODB_AUDIO_URI']}}, 'production')
+  # mysql2://user:pass@host/dbname
+  DB = Sequel.connect(AppConfig['MYSQL_BLOG_URI'])
   Debug = false
 end
 
 configure :test do
-  MongoMapper.database = 'TestMusic'
+  DB = Sequel.sqlite
   AppConfig = Hash.new
   AppConfig["BlogTitel"] = ""
   AppConfig["Description"] = ""

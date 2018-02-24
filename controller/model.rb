@@ -1,64 +1,89 @@
 # encoding: UTF-8
-require "mongo_mapper"
-require "activemodel-serializers-xml"
 require "fileutils"
 require "soundcloud"
 require "uri"
 
-class Social
-  include MongoMapper::Document
+Sequel::Model.plugin :timestamps
 
-  key :key, String
-  key :url, String
+# Social icons
+DB.create_table? :social do
+  primary_key :id
+  String :key
+  String :url
+  Integer :position # 0 for header and 1 for footer
 end
 
-class About
-  include MongoMapper::Document
-
-  key :text, String
-  timestamps!
+class Social < Sequel::Model(:social)
 end
 
-class SoundCloudToken
-  include MongoMapper::Document
 
-  key :access_token,  String, :require => true
-  key :refresh_token, String, :require => true
-  timestamps!
+# about text
+DB.create_table? :aboutPage do
+  primary_key :id
+  String :text
+
+  DateTime :created_at
+  DateTime :updated_at
 end
 
-class Post
-  include MongoMapper::Document
+class About < Sequel::Model(:aboutPage)
+end
 
-  key :title, String, :require => true, :length => { :in => 5..40 }
-  key :text,  String, :require => true
-  key :publish, Boolean, :require => true
-  key :_type, String
 
-  one :url
-  timestamps!
+# soundcloudToken
+DB.create_table? :soundCloudToken do
+  primary_key :id
+  String :access_token, :require => true
+  String :refresh_token, :require => true
 
-  def created_at_formated()
+  DateTime :created_at
+  DateTime :updated_at
+end
+
+class SoundCloudToken < Sequel::Model(:soundCloudToken)
+end
+
+# Post
+DB.create_table? :post do
+  primary_key :id
+
+  String :title, :require => true, :length => { :in => 5..40 }
+  String :text, :require => true
+  TrueClass :publish, default: true, :require => true
+  String :_type
+
+  many_to_one :url
+
+  many_to_one :musicPost
+  many_to_one :videoPost
+
+  DateTime :created_at
+  DateTime :updated_at
+end
+
+class Post < Sequel::Model(:post)
+  def created_at_formated
     created_at.strftime("%d %B %Y, %H:%M %p")
   end
 end
 
-class MusicPost < Post
-  include MongoMapper::Document
+# MusicPost
+DB.create_table? :musicPost do
+  primary_key :id
+  one_to_one :post
 
-  key :soundCloudUrl,  String,  :require => true
-  key :filePath,       String,  :require => true
-  key :fileName,       String,  :require => true
-  key :soundCloudId,   Integer, :require => true, :numeric => true
+  String :soundCloudUrl, :require => true
+  String :filePath, :require => true
+  String :fileName, :require => true
+  Integer :soundCloudId, :require => true 
+end
 
-  before_validation :uploadToSoundCloud
-
-  def embedded()
+class MusicPost < Sequel::Model(:musicPost)
+  def embedded
     '<iframe id="sc-widget" src="https://w.soundcloud.com/player/?url=' + soundCloudUrl + '&auto_play=false&auto_advance=true&buying=false&liking=false&download=true&sharing=true&show_artwork=true&show_comments=false&show_playcount=false&show_user=true&start_track=0" width="100%" height="166" scrolling="no" frameborder="no"></iframe>'
   end
 
-  private
-  def uploadToSoundCloud()
+  def before_validation
     if soundCloudUrl != nil
       return
     end
@@ -105,33 +130,25 @@ class MusicPost < Post
     else
       errors.add(:soundCloudUrl, "No Soundcloud token!")
     end
+    super
   end
 end
 
-class VideoPost < Post
-  include MongoMapper::Document
-  
-  key :videoURL, String, :require => true
+# MusicPost
+DB.create_table? :videoPost do
+  primary_key :id
+  one_to_one :post
 
-  validate :isYouTubeLink
+  String :videoURL, :require => true
+end
 
-  def embedded()
+class VideoPost < Sequel::Model(:videoPost)
+  def embedded
     '<div class="videoWrapper"><iframe id="ytplayer" type="text/html" width="560" height="349" src="https://www.youtube.com/embed/' + youtube_id(videoURL) + '" frameborder="0"></iframe></div>'
   end
 
-  def youtube_id(youtube_url)
-    if youtube_url[/youtu\.be\/([^\?]*)/]
-      youtube_id = $1
-    else
-      # Regex from # http://stackoverflow.com/questions/3452546/javascript-regex-how-to-get-youtube-video-id-from-url/4811367#4811367
-      youtube_url[/^.*((v\/)|(embed\/)|(watch\?))\??v?=?([^\&\?]*).*/]
-      youtube_id = $5
-    end
-    return youtube_id
-  end
-
-  private
-  def isYouTubeLink()
+  def validate
+    super
     if videoURL == nil
       return
     end
@@ -145,18 +162,32 @@ class VideoPost < Post
       errors.add(:videoURL, "It don't look like a link :O")
     end
   end
-end
-
-class Url
-  include MongoMapper::Document
-
-  key :nice, String, :require => true
-
-  belongs_to :post
-  before_validation :makeUrlNice
 
   private
-  def makeUrlNice
+  def youtube_id(youtube_url)
+    if youtube_url[/youtu\.be\/([^\?]*)/]
+      youtube_id = $1
+    else
+      # Regex from # http://stackoverflow.com/questions/3452546/javascript-regex-how-to-get-youtube-video-id-from-url/4811367#4811367
+      youtube_url[/^.*((v\/)|(embed\/)|(watch\?))\??v?=?([^\&\?]*).*/]
+      youtube_id = $5
+    end
+    return youtube_id
+  end
+end
+
+
+# Url
+DB.create_table? :url do
+  primary_key :id
+  one_to_one :post
+
+  String :nice, :require => true
+end
+
+class Url < Sequel::Model(:url)
+
+  def before_validation
     if nice == nil
       errors.add(:nice, "NO url for you!")
       return nil
@@ -170,6 +201,7 @@ class Url
     self[:nice] = newUrl
   end
 
+  private
   def sanitize(string)
     string.downcase.gsub("ö", "oe").gsub("ü", "ue").gsub("ä", "ae").gsub(/\W/,'-').squeeze('-').chomp('-').sub!(/^-*/, '')
   end

@@ -3,13 +3,13 @@ source 'https://rubygems.org'
 gem "rake"
 gem "puma"
 gem "sinatra"
-gem "mongo_mapper"
-gem "activemodel-serializers-xml"
-gem "active_model_serializers"
-gem "bson_ext"
 gem "soundcloud"
 gem "maruku"
 gem "builder"
+
+gem "sequel"
+gem "sqlite3"
+gem "mysql2"
 
 group :test do
   gem 'rack-test'
