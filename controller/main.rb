@@ -11,7 +11,14 @@ require_relative "error.rb"
 require_relative "login.rb"
 
 get "/" do
+  @about = About.last(:order => :created_at.asc)
+  @aboutMenu = true
+  erb :about 
+end
+
+get "/blog/?" do
   @posts = GetPosts()
+  puts AppConfig["Social"]
   erb :index
 end
 

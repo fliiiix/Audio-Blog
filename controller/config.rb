@@ -16,6 +16,7 @@ configure :development do
   AppConfig = YAML.load_file(File.expand_path("../config.yaml", File.dirname(__FILE__)))["development"]
   MongoMapper.database = 'music'
   set :show_exceptions, true
+  Debug = true
 end
 
 configure :production do
