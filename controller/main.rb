@@ -91,6 +91,7 @@ end
 
 get "/social/?" do
   protected!
+  p Social.all
   erb :addSocialMedia, locals: {social: AppConfig["Social"], saved: false}
 end
 

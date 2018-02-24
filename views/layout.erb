@@ -20,7 +20,7 @@
 
                 <% if !AppConfig["Social"].empty? %>
                     <% for account in AppConfig["Social"] %>
-                      <% s = Social.detect {|e| e == account}; if s != nil && s.url != "" && s.position == 0 %>
+                      <% s = Social.detect {|e| e == account}; if s != nil && s.url != "" %>
                         <div class="icon">
                             <a href="<%= s.url %>" target="_blank"><img src="/img/social/<%= account %>.png"></a>
                         </div>
