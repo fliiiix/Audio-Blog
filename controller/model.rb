@@ -4,6 +4,7 @@ require "soundcloud"
 require "uri"
 
 Sequel::Model.plugin :timestamps
+Sequel::Model.plugin :tactical_eager_loading
 Sequel.extension :pagination
 
 DB.extension(:pagination)
@@ -82,6 +83,8 @@ class Post < Sequel::Model(:post)
     created_at.strftime("%d %B %Y, %H:%M %p")
   end
 end
+
+Post.plugin :tactical_eager_loading
 
 # MusicPost
 DB.create_table? :musicPost do

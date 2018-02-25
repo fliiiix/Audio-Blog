@@ -39,7 +39,7 @@ get "/archiv/?" do
 end
 
 get "/page/?" do
-  redirect "/"
+  redirect "/blog"
 end
 
 get "/page/:id/?" do |pageId|
@@ -56,13 +56,13 @@ end
 def GetPosts(page = 1, elementPerPage = 15)
   @pageId = page.to_i
   if admin?
-    posts = Post.reverse(:created_at).paginate(elementPerPage, page)
-    @postPagesTotal = (Post.all.count / elementPerPage)
+    posts = Post.reverse(:created_at).paginate(@pageId, elementPerPage)
+    @postPagesTotal = posts.page_count
   else
-    posts = Post.where(:publish => true).reverse(:created_at).paginate(elementPerPage, page)
-    @postPagesTotal = (Post.all.count / elementPerPage)
+    posts = Post.where(:publish => true).reverse(:created_at).paginate(@pageId, elementPerPage)
+    @postPagesTotal = posts.page_count
   end
-  return posts
+  return posts.all
 end
 
 get "/about/?" do
@@ -108,12 +108,13 @@ end
 
 post "/add/text/?" do
   protected!
+  url = Url.new(:nice => params[:title]).save
   post = Post.new(:title => params[:title], 
                   :text => params[:mdtext],
                   :publish => AppConfig["Status"],
-                  :url => Url.new(:nice => params[:title]))
+                  :url => url.id)
   if post.save
-    redirect "/"
+    redirect "/blog"
   end
 
   @meldung = "Error(s): " + post.errors.map {|k,v| "#{k}: #{v}"}.to_s
@@ -148,7 +149,7 @@ post "/add/music/?" do
                        :soundCloudId => soundcloudId,
                        :url => Url.new(:nice => params[:title]))
   if post.save
-    redirect "/"
+    redirect "/blog"
   end
 
   @meldung = "Error(s): " + post.errors.map {|k,v| "#{k}: #{v}"}.to_s
@@ -170,7 +171,7 @@ post "/add/video/?" do
                        :url => Url.new(:nice => params[:title]))
 
   if post.save
-    redirect "/"
+    redirect "/blog"
   end
 
   @meldung = "Error(s): " + post.errors.map {|k,v| "#{k}: #{v}"}.to_s
@@ -209,14 +210,14 @@ end
 
 get "/post/delete/:id/?" do |id|
   protected!
-  Post.destroy(id)
-  redirect "/"
+  Post.first(:id => id).delete
+  redirect "/blog"
 end
 
 get "/post/edit/:id/?" do |id|
   protected!
   @postId = id
-  p = Post.find(id)
+  p = Post.first(:id => id)
   
   @title = p.title
   @mdtext = p.text
@@ -237,7 +238,7 @@ get "/post/edit/:id/?" do |id|
 end
 
 post "/edit/:type/:id/?" do |type, id|
-  p = Post.find(id)
+  p = Post.first(:id => id)
 
   p.title = params["title"]
   p.text = params["mdtext"]
@@ -247,7 +248,7 @@ post "/edit/:type/:id/?" do |type, id|
   end
 
   if p.save
-    redirect "/"
+    redirect "/blog"
   end
 
   @meldung = "Error(s): " + p.errors.map {|k,v| "#{k}: #{v}"}.to_s
@@ -273,17 +274,17 @@ end
 
 get "/post/publish/:id/?" do |id|
   protected!
-  p = Post.find(id)
+  p = Post.first(:id => id)
   if p != nil
     p.publish = !p.publish
   end
   p.save
-  redirect "/"
+  redirect "/blog"
 end
 
 get "/id/:id/?" do |id|
-  @text = Post.find(id)
-  @music = MusicPost.find(id)
+  @text = Post.first(:id => id)
+  @music = MusicPost.first(:id => id)
   erb :index
 end
 
@@ -294,17 +295,17 @@ get "/:name/?" do |name|
   halt 404 if url == nil
 
   if url.post_id != nil
-    @post = Post.find(url.post_id)
+    @post = Post.first(:id => url.post_id)
   end
    
   begin
-    @post = MusicPost.find(url.music_post_id) if @post == nil
+    @post = MusicPost.first(:id => url.music_post_id) if @post == nil
   rescue Exception => e
     @post = nil
   end
 
   begin
-    @post = VideoPost.find(url.video_post_id) if @post == nil
+    @post = VideoPost.first(:id => url.video_post_id) if @post == nil
   rescue Exception => e
     @post = nil
   end

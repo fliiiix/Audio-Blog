@@ -23,20 +23,20 @@
 
 <% if @posts %>
   <% @posts.each do |post| %>
-    <div style="background-color: <%= (post.publish? ? "white" : "silver")%>;" class="block">
+    <div style="background-color: <%= (post.publish == true ? "white" : "silver")%>;" class="block">
       <h1 class="pull-left"><%= post.title %></h1>
       <%= erb :adminPostControl, :locals => {:post => post} if admin? %>
       <div style="clear:both;">
         <%= Maruku.new(post.text).to_html.byteslice(0, 1000) %>
       </div>
       <%= post.embedded if post._type == "MusicPost" || post._type == "VideoPost" %>
-      <a href="/<%= post.url.nice %>">read more</a>
+      <a href="/<%= Url.first(:id => post.url).nice %>">read more</a>
     </div>
   <% end %>
 <% end %>
 
 <% if @post %>
-  <div style="background-color: <%= (@post.publish? ? "white" : "silver")%>;" class="block">
+  <div style="background-color: <%= (@post.publish == true ? "white" : "silver")%>;" class="block">
     <h1 class="pull-left"><%= @post.title %></h1>
     <%= erb :adminPostControl, :locals => {:post => @post} if admin? %>
     <div class="clear">
