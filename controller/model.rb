@@ -67,7 +67,7 @@ DB.create_table? :post do
   String :title, :require => true, :length => { :in => 5..40 }
   String :text, :require => true
   TrueClass :publish, default: true, :require => true
-  String :_type
+  String :type
 
   many_to_one :url
 

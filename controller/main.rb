@@ -97,7 +97,7 @@ end
 post "/social/?" do
   protected!
   for account in params.reject { |key, value| key.include? "-location" }
-    s = Social.first(:key => account[0]) == nil ? Social.new(:key => account[0]) : Social.first(:key => account[0])
+    s = Social.first(key: account[0]) == nil ? Social.new(key: account[0]) : Social.first(key: account[0])
     s.url = account[1]
     # 0 for header and 1 for footer
     s.position = (params.has_key? "#{account[0]}-location") ? 1 : 0
@@ -112,6 +112,7 @@ post "/add/text/?" do
   post = Post.new(:title => params[:title], 
                   :text => params[:mdtext],
                   :publish => AppConfig["Status"],
+                  :type => "text",
                   :url => url.id)
   if post.save
     redirect "/blog"
@@ -147,6 +148,7 @@ post "/add/music/?" do
                        :filePath => filepath,
                        :soundCloudUrl => soundcloudurl,
                        :soundCloudId => soundcloudId,
+                       :type => "music",
                        :url => Url.new(:nice => params[:title]))
   if post.save
     redirect "/blog"
@@ -168,6 +170,7 @@ post "/add/video/?" do
                        :text => params[:mdtext],
                        :publish => AppConfig["Status"],
                        :videoURL => params[:videolink],
+                       :type => "video",
                        :url => Url.new(:nice => params[:title]))
 
   if post.save
@@ -210,27 +213,21 @@ end
 
 get "/post/delete/:id/?" do |id|
   protected!
-  Post.first(:id => id).delete
+  Post.first(id: id).delete
   redirect "/blog"
 end
 
 get "/post/edit/:id/?" do |id|
   protected!
   @postId = id
-  p = Post.first(:id => id)
+  post = Post.first(id: id)
   
-  @title = p.title
-  @mdtext = p.text
+  @title = post.title
+  @mdtext = post.text
 
-  if p._type == "Post"
-    @element = "text"
-  end
-  if p._type == "MusicPost"
-    @element = "music"
-  end
-  if p._type == "VideoPost"
-    @element = "video"
-    @videolink = p.videoURL
+  @element = post.type
+  if post.type == "video"
+    @videolink = post.videoURL
   end
   
   @posts = GetPosts()
@@ -238,12 +235,12 @@ get "/post/edit/:id/?" do |id|
 end
 
 post "/edit/:type/:id/?" do |type, id|
-  p = Post.first(:id => id)
+  p = Post.first(id: id)
 
   p.title = params["title"]
   p.text = params["mdtext"]
 
-  if p._type == "VideoPost"
+  if p.type == "video"
     p.videoURL = params["videolink"]
   end
 
@@ -256,15 +253,9 @@ post "/edit/:type/:id/?" do |type, id|
   @mdtext = params[:mdtext]
   @videolink = params[:videolink]
   
-  if p._type == "Post"
-    @element = "text"
-  end
-  if p._type == "MusicPost"
-    @element = "music"
-  end
-  if p._type == "VideoPost"
-    @element = "video"
-    @videolink = params[:videolink]
+  @element = post.type
+  if post.type == "video"
+    @videolink = post.videoURL
   end
 
   @posts = GetPosts()
@@ -274,7 +265,7 @@ end
 
 get "/post/publish/:id/?" do |id|
   protected!
-  p = Post.first(:id => id)
+  p = Post.first(id: id)
   if p != nil
     p.publish = !p.publish
   end
@@ -283,7 +274,7 @@ get "/post/publish/:id/?" do |id|
 end
 
 get "/id/:id/?" do |id|
-  @text = Post.first(:id => id)
+  @text = Post.first(id: id)
   @music = MusicPost.first(:id => id)
   erb :index
 end
@@ -291,21 +282,21 @@ end
 get "/:name/?" do |name|
   @post = nil
 
-  url = Url.first(:nice => name)
+  url = Url.first(nice: name)
   halt 404 if url == nil
 
   if url.post_id != nil
-    @post = Post.first(:id => url.post_id)
+    @post = Post.first(id: url.post_id)
   end
    
   begin
-    @post = MusicPost.first(:id => url.music_post_id) if @post == nil
+    @post = MusicPost.first(id: url.music_post_id) if @post == nil
   rescue Exception => e
     @post = nil
   end
 
   begin
-    @post = VideoPost.first(:id => url.video_post_id) if @post == nil
+    @post = VideoPost.first(id: url.video_post_id) if @post == nil
   rescue Exception => e
     @post = nil
   end

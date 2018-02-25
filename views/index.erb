@@ -2,7 +2,7 @@
   <div class="block">
     <% if SoundCloudToken.first == nil %>
       <aside>
-        Hey you there is no souncloud account fix that fast: 
+        Hey, there is no souncloud account linked you can fix that here: 
         <a href='/auth' class="pure-button"><i class='icon-soundcloud'></i> connect</a>
       </aside>
     <% end %>
@@ -29,7 +29,7 @@
       <div style="clear:both;">
         <%= Maruku.new(post.text).to_html.byteslice(0, 1000) %>
       </div>
-      <%= post.embedded if post._type == "MusicPost" || post._type == "VideoPost" %>
+      <%= post.embedded if post.type == "music" || post.type == "video" %>
       <a href="/<%= Url.first(:id => post.url).nice %>">read more</a>
     </div>
   <% end %>
@@ -42,7 +42,7 @@
     <div class="clear">
       <%= Maruku.new(@post.text).to_html%>
     </div>
-    <%= @post.embedded if @post._type == "MusicPost" || @post._type == "VideoPost" %>
+    <%= @post.embedded if @post.type == "music" || @post.type == "video" %>
   </div>
 <% end %>
 

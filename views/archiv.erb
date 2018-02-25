@@ -14,9 +14,9 @@
 						<%= post.created_at_formated %>
 					</td>
 					<td>
-						<%= '<i class="icon-pencil-2"></i>' if post._type == "Post" %>
-						<%= '<i class="icon-music"></i>' if post._type == "MusicPost" %>
-      					<%= '<i class="icon-camera"></i>' if post._type == "VideoPost" %>
+						<%= '<i class="icon-pencil-2"></i>' if post.type == "text" %>
+						<%= '<i class="icon-music"></i>' if post.type == "music" %>
+      					<%= '<i class="icon-camera"></i>' if post.type == "video" %>
 					</td>
 				</tr>
 			<% end %>
