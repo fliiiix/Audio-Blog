@@ -43,14 +43,6 @@
 
     <div class="footer">
         <div class="inner-footer">
-            <!--<div class="icon">
-                <img src="/img/social/Location.png">
-            </div>
-            <p>Schulstrasse, 6340 Baar</p>
-            <div class="icon">
-                <img src="/img/social/Whatsapp.png">
-            </div>
-            <p style="margin-top: 30px;"><%#= Social.find_by_key("Whatsapp").url %></p>-->
             <% if !AppConfig["Social"].empty? %>
                 <% for account in AppConfig["Social"] %>
                     <% s = Social.find(:key => account); if s != nil && s.url != "" && s.position == 0 %>
