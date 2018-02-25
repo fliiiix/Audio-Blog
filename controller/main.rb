@@ -166,12 +166,14 @@ end
 
 post "/add/video/?" do
   protected!
-  post = VideoPost.new(:title => params[:title], 
-                       :text => params[:mdtext],
-                       :publish => AppConfig["Status"],
-                       :videoURL => params[:videolink],
-                       :type => "video",
-                       :url => Url.new(:nice => params[:title]))
+  url = Url.new(:nice => params[:title]).save
+  vpost = VideoPost.new(:videoURL => params[:videolink]).save
+  post = Post.new(:title => params[:title], 
+                  :text => params[:mdtext],
+                  :publish => AppConfig["Status"],
+                  :type => "video",
+                  :url => url.id,
+                  :videoPost => vpost.id)
 
   if post.save
     redirect "/blog"
@@ -227,7 +229,7 @@ get "/post/edit/:id/?" do |id|
 
   @element = post.type
   if post.type == "video"
-    @videolink = post.videoURL
+    @videolink = post.video.videoURL
   end
   
   @posts = GetPosts()
@@ -241,9 +243,12 @@ post "/edit/:type/:id/?" do |type, id|
   p.text = params["mdtext"]
 
   if p.type == "video"
-    p.videoURL = params["videolink"]
+    puts params["videolink"]
+    p.video.videoURL = params["videolink"]
   end
 
+  puts p.video.save
+  puts p.video.videoURL
   if p.save
     redirect "/blog"
   end
@@ -255,7 +260,7 @@ post "/edit/:type/:id/?" do |type, id|
   
   @element = post.type
   if post.type == "video"
-    @videolink = post.videoURL
+    @videolink = post.video.videoURL
   end
 
   @posts = GetPosts()

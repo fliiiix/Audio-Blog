@@ -82,6 +82,34 @@ class Post < Sequel::Model(:post)
   def created_at_formated
     created_at.strftime("%d %B %Y, %H:%M %p")
   end
+
+  def embedded 
+    if type == "video"
+      '<div class="videoWrapper"><iframe id="ytplayer" type="text/html" width="560" height="349" src="https://www.youtube.com/embed/' + youtube_id(video.videoURL) + '" frameborder="0"></iframe></div>'
+    elsif type == "music"
+      '<iframe id="sc-widget" src="https://w.soundcloud.com/player/?url=' + music.soundCloudUrl + '&auto_play=false&auto_advance=true&buying=false&liking=false&download=true&sharing=true&show_artwork=true&show_comments=false&show_playcount=false&show_user=true&start_track=0" width="100%" height="166" scrolling="no" frameborder="no"></iframe>'
+    end
+  end
+
+  def video
+    @video_cache ||= VideoPost.find(id: videoPost)
+  end
+
+  def music
+    @music_cache ||= MusicPost.find(id: musicPost)
+  end
+
+  private
+  def youtube_id(youtube_url)
+    if youtube_url[/youtu\.be\/([^\?]*)/]
+      youtube_id = $1
+    else
+      # Regex from # http://stackoverflow.com/questions/3452546/javascript-regex-how-to-get-youtube-video-id-from-url/4811367#4811367
+      youtube_url[/^.*((v\/)|(embed\/)|(watch\?))\??v?=?([^\&\?]*).*/]
+      youtube_id = $5
+    end
+    return youtube_id
+  end
 end
 
 Post.plugin :tactical_eager_loading
@@ -98,10 +126,6 @@ DB.create_table? :musicPost do
 end
 
 class MusicPost < Sequel::Model(:musicPost)
-  def embedded
-    '<iframe id="sc-widget" src="https://w.soundcloud.com/player/?url=' + soundCloudUrl + '&auto_play=false&auto_advance=true&buying=false&liking=false&download=true&sharing=true&show_artwork=true&show_comments=false&show_playcount=false&show_user=true&start_track=0" width="100%" height="166" scrolling="no" frameborder="no"></iframe>'
-  end
-
   def before_validation
     if soundCloudUrl != nil
       return
@@ -162,10 +186,6 @@ DB.create_table? :videoPost do
 end
 
 class VideoPost < Sequel::Model(:videoPost)
-  def embedded
-    '<div class="videoWrapper"><iframe id="ytplayer" type="text/html" width="560" height="349" src="https://www.youtube.com/embed/' + youtube_id(videoURL) + '" frameborder="0"></iframe></div>'
-  end
-
   def validate
     super
     if videoURL == nil
@@ -180,18 +200,6 @@ class VideoPost < Sequel::Model(:videoPost)
     rescue Exception => e
       errors.add(:videoURL, "It don't look like a link :O")
     end
-  end
-
-  private
-  def youtube_id(youtube_url)
-    if youtube_url[/youtu\.be\/([^\?]*)/]
-      youtube_id = $1
-    else
-      # Regex from # http://stackoverflow.com/questions/3452546/javascript-regex-how-to-get-youtube-video-id-from-url/4811367#4811367
-      youtube_url[/^.*((v\/)|(embed\/)|(watch\?))\??v?=?([^\&\?]*).*/]
-      youtube_id = $5
-    end
-    return youtube_id
   end
 end
 
