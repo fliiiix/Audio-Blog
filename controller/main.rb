@@ -242,13 +242,13 @@ post "/edit/:type/:id/?" do |type, id|
   p.title = params["title"]
   p.text = params["mdtext"]
 
+  
   if p.type == "video"
     puts params["videolink"]
     p.video.videoURL = params["videolink"]
+    p.video.save
   end
 
-  puts p.video.save
-  puts p.video.videoURL
   if p.save
     redirect "/blog"
   end

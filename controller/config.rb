@@ -14,7 +14,8 @@ end
 
 configure :development do
   AppConfig = YAML.load_file(File.expand_path("../config.yaml", File.dirname(__FILE__)))["development"]
-  DB = Sequel.sqlite
+  #DB = Sequel.sqlite
+  DB = Sequel.connect("sqlite://test.db")
   set :show_exceptions, true
   Debug = true
 end

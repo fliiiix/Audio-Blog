@@ -99,6 +99,10 @@ class Post < Sequel::Model(:post)
     @music_cache ||= MusicPost.find(id: musicPost)
   end
 
+  def theurl
+    @url_cache ||= Url.find(id: url)
+  end
+
   private
   def youtube_id(youtube_url)
     if youtube_url[/youtu\.be\/([^\?]*)/]
@@ -111,8 +115,6 @@ class Post < Sequel::Model(:post)
     return youtube_id
   end
 end
-
-Post.plugin :tactical_eager_loading
 
 # MusicPost
 DB.create_table? :musicPost do
