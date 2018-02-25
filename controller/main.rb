@@ -91,16 +91,16 @@ end
 
 get "/social/?" do
   protected!
-  p Social.all
   erb :addSocialMedia, locals: {social: AppConfig["Social"], saved: false}
 end
 
 post "/social/?" do
   protected!
-  for account in params
+  for account in params.reject { |key, value| key.include? "-location" }
     s = Social.first(:key => account[0]) == nil ? Social.new(:key => account[0]) : Social.first(:key => account[0])
     s.url = account[1]
-    s.position = 0
+    # 0 for header and 1 for footer
+    s.position = (params.has_key? "#{account[0]}-location") ? 1 : 0
     s.save
   end
   erb :addSocialMedia, locals: {social: AppConfig["Social"], saved: true}

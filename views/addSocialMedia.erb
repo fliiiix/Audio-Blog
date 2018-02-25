@@ -3,11 +3,14 @@
 	<h1>Social Media Accounts</h1>
 	
 		<% if !social.empty? %>
+		<p>Checked checkbox for header!</p>
 		<form class="pure-form pure-form-aligned" action="/social" method="post">
 			<% for account in social %>
 				<div class="pure-control-group">
 					<img src="/img/social/<%= account %>.png" alt="<%= account %>" title="<%= account %>" class="img-social">
-					<input type="text" name="<%= account %>" class="pure-input-2-3" value="<%= s = Social.detect {|e| e == account}; s != nil ? s.url : '' %>">
+					<% s = Social.find(:key => account) %>
+					<input type="text" name="<%= account %>" class="pure-input-2-3" value="<%= s != nil ? s.url : '' %>">
+					<input type="checkbox" name="<%= account %>-location" <%= s != nil && s.position == 1 ? "checked" : "" %>>
 				</div>
 			<% end %>
 		  	<button type="submit"class="pure-button pure-button-primary">save</button>
