@@ -175,7 +175,7 @@ class MusicPost < Sequel::Model(:musicPost)
         })
         self[:soundCloudUrl] = track.permalink_url
         self[:soundCloudId] = track.id
-      rescue Exception => e
+      rescue Exception
         errors.add(:soundCloudUrl, "Something unexpected went wrong, check your soundcloud account!")
       end
     else
@@ -205,7 +205,7 @@ class VideoPost < Sequel::Model(:videoPost)
       if uri.host.index("youtu") == nil
         errors.add(:videoURL, "It looks like your link is not from YouTube use one from youtube.com or youtu.be")
       end
-    rescue Exception => e
+    rescue Exception
       errors.add(:videoURL, "It don't look like a link :O")
     end
   end

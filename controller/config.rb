@@ -36,4 +36,5 @@ configure :test do
   AppConfig["Description"] = ""
   AppConfig["User"] = ""
   AppConfig["Pass"] = ""
+  AppConfig["Social"] = ""
 end

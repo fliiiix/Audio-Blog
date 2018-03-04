@@ -309,13 +309,13 @@ get "/:name/?" do |name|
    
   begin
     @post = MusicPost.first(id: url.music_post_id) if @post == nil
-  rescue Exception => e
+  rescue Exception
     @post = nil
   end
 
   begin
     @post = VideoPost.first(id: url.video_post_id) if @post == nil
-  rescue Exception => e
+  rescue Exception
     @post = nil
   end
 
