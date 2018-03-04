@@ -234,6 +234,9 @@ get "/post/edit/:id/?" do |id|
   if post.type == "video"
     @videolink = post.video.videoURL
   end
+  if post.type == "music"
+    @soundCloudUrl = post.music.soundCloudUrl
+  end
   
   @posts = GetPosts()
   erb :index
@@ -244,12 +247,16 @@ post "/edit/:type/:id/?" do |type, id|
 
   p.title = params["title"]
   p.text = params["mdtext"]
-
   
   if p.type == "video"
-    puts params["videolink"]
     p.video.videoURL = params["videolink"]
     p.video.save
+  end
+
+  if p.type == "music"
+    puts params["soundCloudUrl"]
+    p.music.soundCloudUrl = params["soundCloudUrl"]
+    p.music.save
   end
 
   if p.save
@@ -264,6 +271,9 @@ post "/edit/:type/:id/?" do |type, id|
   @element = post.type
   if post.type == "video"
     @videolink = post.video.videoURL
+  end
+  if post.type == "music"
+    @soundCloudUrl = post.music.soundCloudUrl
   end
 
   @posts = GetPosts()

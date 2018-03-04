@@ -13,17 +13,18 @@
         <span id="filename"></span> 
     </div>
      
+    <!--Soundcloud upload is broken
     <div id="uploadDiv" class="pure-button fileContainer pull-left" <%= 'style="display:none;"' if @postId%>>
         <i class="icon-box-remove"></i>
         <span>Select file</span>    
         <input type="file" name="soundSample" id="uploadInput" onchange="enableUpload();" />
     </div>
 
-    <div id="useSoundcloudurl" class="pure-button" onclick="useURL();">Use a URL</div>
+    <div id="useSoundcloudurl" class="pure-button" onclick="useURL();">Use a URL</div>-->
 
-    <div id="soundcloudURL" class="pure-form pull-left" style="display:none; width: 85%;">
+    <div id="soundcloudURL" class="pure-form pull-left" style="/*display:none;*/ width: 85%;">
         <input type="text" name="soundCloudUrl" placeholder="Soundcloud URL" value="<%= @soundCloudUrl if @soundCloudUrl %>" class="pure-input-1-2 mBottom" />
-        <div class="pure-button" onclick="useFile();">Upload a file instead</div>
+        <!--<div class="pure-button" onclick="useFile();">Upload a file instead</div>-->
     </div>
     
     <input type="submit" value="Save" id="submit" class="pure-button pure-button-primary pure-button-small pull-right">

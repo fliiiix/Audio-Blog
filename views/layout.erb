@@ -44,14 +44,22 @@
     <div class="footer">
         <div class="inner-footer">
             <% if !AppConfig["Social"].empty? %>
+                <table>
                 <% for account in AppConfig["Social"] %>
                     <% s = Social.find(:key => account); if s != nil && s.url != "" && s.position == 0 %>
-                        <div class="icon">
-                            <img src="/img/social/<%= account %>.png">
-                        </div>
-                        <p><%= s.url %></p>
+                        <tr>
+                            <td>
+                                <div class="icon">
+                                    <img src="/img/social/<%= account %>.png">
+                                </div>
+                            </td>
+                            <td>
+                                <p><%= s.url %></p>
+                            </td>
+                        </tr>
                     <% end %>
                 <% end %>
+                </table>
             <% end %>
         </div>
     </div>

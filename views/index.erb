@@ -1,10 +1,11 @@
 <% if admin? %>
   <div class="block">
     <% if SoundCloudToken.first == nil %>
+      <!-- it's broken :(
       <aside>
         Hey, there is no souncloud account linked you can fix that here: 
         <a href='/auth' class="pure-button"><i class='icon-soundcloud'></i> connect</a>
-      </aside>
+      </aside>-->
     <% end %>
     <% if @element != "music" && @element != "text" && @element != "video" %>
       <%= erb :createNew %>
