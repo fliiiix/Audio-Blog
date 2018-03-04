@@ -132,7 +132,7 @@ class MusicPost < Sequel::Model(:musicPost)
     if soundCloudUrl != nil
       return
     end
-    lastToken = SoundCloudToken.last(:order => :created_at.asc)
+    lastToken = SoundCloudToken.reverse(:created_at).first
 
     #get soundcloud client
     if lastToken != nil
@@ -160,11 +160,17 @@ class MusicPost < Sequel::Model(:musicPost)
         errors.add(:soundCloudUrl, "Ex: " + e.to_s)
       end
 
+      tracks = client.get('/tracks', :limit => 10)
+      # print each link
+      tracks.each do |track|
+        puts track.permalink_url
+      end
+
       #upload to soundcloud
       begin
         track = client.post('/tracks', :track => {
           :title => fileName,
-          :downloadable => true,
+          :downloadable => true.to_s,
           :asset_data => File.new(path, 'rb')
         })
         self[:soundCloudUrl] = track.permalink_url

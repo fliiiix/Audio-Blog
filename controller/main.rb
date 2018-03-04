@@ -140,16 +140,19 @@ post "/add/music/?" do
     soundcloudurl = params[:soundCloudUrl]
     soundcloudId = -1
   end
-  
-  post = MusicPost.new(:title => params[:title],
-                       :text => params[:mdtext],
-                       :publish => AppConfig["Status"],
-                       :fileName => filename,
-                       :filePath => filepath,
-                       :soundCloudUrl => soundcloudurl,
-                       :soundCloudId => soundcloudId,
-                       :type => "music",
-                       :url => Url.new(:nice => params[:title]))
+
+  url = Url.new(:nice => params[:title]).save
+  mpost = MusicPost.new(:fileName => filename,
+                        :filePath => filepath,
+                        :soundCloudUrl => soundcloudurl,
+                        :soundCloudId => soundcloudId).save
+  post = Post.new(:title => params[:title], 
+                  :text => params[:mdtext],
+                  :publish => AppConfig["Status"],
+                  :type => "music",
+                  :url => url.id,
+                  :musicPost => mpost.id)
+
   if post.save
     redirect "/blog"
   end
@@ -207,10 +210,10 @@ get "/authPoint/?" do
   # exchange authorization code for access token
   auth = client.exchange_token(:code => params[:code])
 
-  token = SoundCloudToken.new(:access_token => auth[:access_token], 
-                              :refresh_token => auth[:refresh_token])
-  token.save
-  redirect "/"
+  SoundCloudToken.new(:access_token => auth[:access_token], 
+                      :refresh_token => auth[:refresh_token]).save
+
+  redirect "/blog"
 end
 
 get "/post/delete/:id/?" do |id|
