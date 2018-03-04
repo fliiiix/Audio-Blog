@@ -2,11 +2,10 @@ Audio-Blog
 ==========
 [![Build Status](https://travis-ci.org/fliiiix/Audio-Blog.png?branch=master)](https://travis-ci.org/fliiiix/Audio-Blog)
 
-~ in work ~
-#The Config
+# The Config
 
 ```
-cat $OPENSHIFT_DATA_DIR/config.yaml
+cat $PROJECTDIR/config.yaml
 production:
   SoundCloudClientId: xxx
   SoundCloudClientSecret: xxx
@@ -15,7 +14,7 @@ production:
   Description: Bla bla bla
   User: test
   Pass: ChangeMe
-  Social: ["Email", "Instagram", "Location", "Soundcloud", "Twitter", "Whatsapp", "Youtube"]
+  Social: ["Email", "Instagram", "Location", "Soundcloud", "Twitter", "Whatsapp", "Youtube", "Beatstarts", "Airbit"]
 ```
 
 **Social**
@@ -28,20 +27,18 @@ Possible values are:
 * Twitter
 * Whatsapp
 * Youtube
+* Beatstarts
+* Airbit
 
 
+You can easily extend this just add a .png file to `public/img/social/` and add the file name to the Social config (your `config.yaml`)
 
 
 ### Environment 
+
 The :environment defaults to the value of the RACK_ENV environment variable (ENV['RACK_ENV']), or :development when no RACK_ENV environment variable is set. You can configure different values for development and production.
 
-# Build on top of
-* [sinatra](http://www.sinatrarb.com/)
-* [mongomapper](http://mongomapper.com/)
-  * [mongoDB](http://www.mongodb.org/)
-* [soundcloud](https://soundcloud.com/)
-
 For layout the awesome [pure](http://purecss.io/) framework.  
-The icons are from [icomoon](http://icomoon.io/). All social media icons are made by [@theR3m](http://twitter.com/theR3m)
+The icons are from [icomoon](http://icomoon.io/).
 
 Credits for the image on /login from [flic.kr](http://www.flickr.com/photos/42931449@N07/5771025070/): [http://www.planetofsuccess.com/blog/](http://www.planetofsuccess.com/blog/)
