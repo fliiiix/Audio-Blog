@@ -12,10 +12,17 @@
 <body style="">
     <div class="header">
         <div class="navigation">
-            <div class="navigation-item"><a class="nav-selected" href="/">Lucky Martin</a></div>
-            <div class="navigation-item"><a class="nav-unselected" href="/deals">Angebote</a></div>
-            <div class="navigation-item"><a class="nav-unselected" href="/blog">Blog</a></div>
-            <%= '<div class="navigation-item"><a class="nav-unselected" href="/social">Social</a></div>' if admin? %>
+            <div class="navigation-item">
+                <a class="<%= (@nav != nil && @nav == 'home' || @nav == nil) ? 'nav-selected' : 'nav-unselected'%>" href="/">Lucky Martin</a>
+            </div>
+            <div class="navigation-item">
+                <a class="<%= (@nav != nil && @nav == 'deals') ? 'nav-selected' : 'nav-unselected'%>" href="/deals">Angebote</a>
+            </div>
+            <div class="navigation-item">
+                <a class="<%= (@nav != nil && @nav == 'blog') ? 'nav-selected' : 'nav-unselected'%>" href="/blog">Blog</a>
+            </div>
+            <% seleced = (@nav != nil && @nav == "social") ? "nav-selected" : "nav-unselected" %>
+            <%= "<div class='navigation-item'><a class='#{seleced}' href='/social'>Social</a></div>" if admin? %>
             <div class="quick-links">
 
                 <% if !AppConfig["Social"].empty? %>

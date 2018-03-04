@@ -15,16 +15,65 @@ require_relative "login.rb"
 get "/" do
   @about = About.order(:created_at).last
   @aboutMenu = true
+  @nav = "home"
   erb :about 
 end
 
-get "/deals/?" do
-  @about = Deals.order(:created_at).last
+get "/about/?" do
+  @nav = "home"
+  @about = About.order(:created_at).last
+  @aboutMenu = true
   erb :about 
+end
+
+get "/edit/about/?" do
+  protected!
+  @nav = "home"
+  @about = About.order(:created_at).last
+  erb :aboutEdit
+end
+
+post "/edit/about/?" do
+  protected!
+  about = About.new(:text => params[:mdtext])
+
+  if about.save
+    redirect "/about"
+  else
+    @meldung = "Error(s): " + post.errors.map {|k,v| "#{k}: #{v}"}.to_s
+    erb :aboutEdit
+  end
+end
+
+get "/deals/?" do
+  @deals = Deals.order(:created_at).last
+  @nav = "deals"
+  erb :deals 
+end
+
+get "/edit/deals/?" do
+  protected!
+  @nav = "deals"
+  @deals = Deals.order(:created_at).last
+  erb :dealsEdit
+end
+
+post "/edit/deals/?" do
+  protected!
+  about = Deals.new(:text => params[:mdtext])
+
+  if about.save
+    redirect "/deals"
+  else
+    @nav = "deals"
+    @meldung = "Error(s): " + post.errors.map {|k,v| "#{k}: #{v}"}.to_s
+    erb :dealsEdit
+  end
 end
 
 get "/blog/?" do
   @posts = GetPosts()
+  @nav = "blog"
   erb :index
 end
 
@@ -39,15 +88,18 @@ get "/archiv/?" do
 end
 
 get "/page/?" do
+  @nav = "blog"
   redirect "/blog"
 end
 
 get "/page/:id/?" do |pageId|
+  @nav = "blog"
   @posts = GetPosts(pageId)
   erb :index
 end
 
 get "/add/:element/?" do |element|
+  @nav = "blog"
   @element = element
   @posts = GetPosts()
   erb :index
@@ -65,32 +117,9 @@ def GetPosts(page = 1, elementPerPage = 15)
   return posts.all
 end
 
-get "/about/?" do
-  @about = About.order(:created_at).last
-  @aboutMenu = true
-  erb :about 
-end
-
-get "/edit/about/?" do
-  protected!
-  @about = About.order(:created_at).last
-  erb :aboutEdit
-end
-
-post "/edit/about/?" do
-  protected!
-  about = About.new(:text => params[:mdtext])
-
-  if about.save
-    redirect "/about"
-  else
-    @meldung = "Error(s): " + post.errors.map {|k,v| "#{k}: #{v}"}.to_s
-    erb :aboutEdit
-  end
-end
-
 get "/social/?" do
   protected!
+  @nav = "social"
   erb :addSocialMedia, locals: {social: AppConfig["Social"], saved: false}
 end
 
