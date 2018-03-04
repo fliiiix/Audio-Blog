@@ -24,7 +24,8 @@ configure :production do
   AppConfig = YAML.load_file(File.expand_path("../config.yaml", File.dirname(__FILE__)))["production"]
 
   # mysql2://user:pass@host/dbname
-  DB = Sequel.connect(AppConfig['MYSQL_BLOG_URI'])
+  #DB = Sequel.connect(AppConfig['MYSQL_BLOG_URI'])
+  DB = Sequel.connect("sqlite://music.db")
   Debug = false
 end
 

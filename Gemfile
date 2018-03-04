@@ -9,7 +9,7 @@ gem "builder"
 
 gem "sequel"
 gem "sqlite3"
-gem "mysql2"
+#gem "mysql2"
 
 group :test do
   gem 'rack-test'
