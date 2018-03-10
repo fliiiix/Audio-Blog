@@ -320,34 +320,14 @@ get "/post/publish/:id/?" do |id|
   redirect "/blog"
 end
 
-get "/id/:id/?" do |id|
-  @text = Post.first(id: id)
-  @music = MusicPost.first(:id => id)
-  erb :index
-end
-
 get "/:name/?" do |name|
   @post = nil
 
   url = Url.first(nice: name)
   halt 404 if url == nil
 
-  if url.post_id != nil
-    @post = Post.first(id: url.post_id)
-  end
-   
-  begin
-    @post = MusicPost.first(id: url.music_post_id) if @post == nil
-  rescue Exception
-    @post = nil
-  end
-
-  begin
-    @post = VideoPost.first(id: url.video_post_id) if @post == nil
-  rescue Exception
-    @post = nil
-  end
-
+  @post = Post.first(url: url.id)
+  
   halt 404 if @post == nil
   halt 404 if !admin? && @post.publish == false
    
