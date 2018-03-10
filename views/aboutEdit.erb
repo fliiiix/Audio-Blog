@@ -1,5 +1,5 @@
 <div><%= @meldung %></div>
-<div class="block">
+<div class="block" style="border: 0px solid white;">
 	<form action="/edit/about" method="post" class="pure-form">
 	  <textarea name="mdtext" class="pure-input-1 mBottom" rows="25"><%= @about.text if @about%></textarea>
 	  <input type="submit" value="Speichern" id="submit" class="pure-button pure-button-primary pure-button-small pull-right">

@@ -181,12 +181,11 @@ ul { padding: 0; }
     padding-right: 3%;
     padding-top: 40px;
     padding-bottom: 40px;
-    min-height: 200px;
     background-color: #2A2C31;
 }
 
 .inner-footer {
-    border-top: 2px solid #FFFEDF;
+    border-top: 2px solid #E0D6BB;
 }
 
 .footer .icon {
@@ -198,5 +197,5 @@ ul { padding: 0; }
 .footer p {
     margin-top: 20px;
     margin-left: 20px;
-    color: #FFFEDF;
+    color: #E0D6BB;
 }
