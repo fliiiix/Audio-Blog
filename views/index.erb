@@ -1,10 +1,11 @@
 <% if admin? %>
   <div class="block">
     <% if SoundCloudToken.first == nil %>
+      <!-- it's broken :(
       <aside>
-        Hey you there is no souncloud account fix that fast: 
+        Hey, there is no souncloud account linked you can fix that here: 
         <a href='/auth' class="pure-button"><i class='icon-soundcloud'></i> connect</a>
-      </aside>
+      </aside>-->
     <% end %>
     <% if @element != "music" && @element != "text" && @element != "video" %>
       <%= erb :createNew %>
@@ -23,26 +24,26 @@
 
 <% if @posts %>
   <% @posts.each do |post| %>
-    <div style="background-color: <%= (post.publish? ? "white" : "silver")%>;" class="block">
+    <div style="background-color: <%= (post.publish == true ? "white" : "silver")%>;" class="block">
       <h1 class="pull-left"><%= post.title %></h1>
       <%= erb :adminPostControl, :locals => {:post => post} if admin? %>
       <div style="clear:both;">
         <%= Maruku.new(post.text).to_html.byteslice(0, 1000) %>
       </div>
-      <%= post.embedded if post._type == "MusicPost" || post._type == "VideoPost" %>
-      <a href="/<%= post.url.nice %>">read more</a>
+      <%= post.embedded if post.type == "music" || post.type == "video" %>
+      <a href="/<%= post.theurl.nice %>">read more</a>
     </div>
   <% end %>
 <% end %>
 
 <% if @post %>
-  <div style="background-color: <%= (@post.publish? ? "white" : "silver")%>;" class="block">
+  <div style="background-color: <%= (@post.publish == true ? "white" : "silver")%>;" class="block">
     <h1 class="pull-left"><%= @post.title %></h1>
     <%= erb :adminPostControl, :locals => {:post => @post} if admin? %>
     <div class="clear">
       <%= Maruku.new(@post.text).to_html%>
     </div>
-    <%= @post.embedded if @post._type == "MusicPost" || @post._type == "VideoPost" %>
+    <%= @post.embedded if @post.type == "music" || @post.type == "video" %>
   </div>
 <% end %>
 
@@ -50,7 +51,7 @@
       <div class="pagination pagination-centered">
         <ul style="margin-bottom:20px;">
           <% if @pageId > 1 %>
-            <li><a href="/page/<%= @pageId -1 %>">«</a></li>
+            <li><a href="/page/<%= @pageId - 1 %>">«</a></li>
           <% else %>
             <li class="disabled"><span>«</span></li>
           <% end %>

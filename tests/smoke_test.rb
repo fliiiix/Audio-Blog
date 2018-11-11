@@ -15,4 +15,9 @@ class SmokeTest < Test::Unit::TestCase
     get "/"
     assert last_response.ok?
   end
+  
+  def test_blog_is_up_and_running_200 
+    get "/blog"
+    assert last_response.ok?
+  end
 end

@@ -1,7 +1,7 @@
 <div><%= @meldung %></div>
-<div class="block" style="border: 0px solid white;">
-	<form action="/edit/about" method="post" class="pure-form">
-	  <textarea name="mdtext" class="pure-input-1 mBottom" rows="25"><%= @about.text if @about%></textarea>
+<div class="block">
+	<form action="/edit/deals" method="post" class="pure-form">
+	  <textarea name="mdtext" class="pure-input-1 mBottom" rows="25"><%= @deals.text if @deals%></textarea>
 	  <input type="submit" value="Speichern" id="submit" class="pure-button pure-button-primary pure-button-small pull-right">
 	</form>
 	<div style="clear:both; font-size:0px">&nbsp;</div>

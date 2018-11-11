@@ -1,63 +1,93 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title><%= AppConfig["BlogTitel"] %></title>
+<html style="" class="js flexbox flexboxlegacy canvas canvastext webgl no-touch geolocation postmessage websqldatabase indexeddb hashchange history draganddrop websockets rgba hsla multiplebgs backgroundsize borderimage borderradius boxshadow textshadow opacity cssanimations csscolumns cssgradients cssreflections csstransforms csstransforms3d csstransitions fontface generatedcontent video audio localstorage sessionstorage webworkers applicationcache svg inlinesvg smil svgclippaths">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= AppConfig["BlogTitel"] %></title>
     <meta name="description" content="<%= AppConfig["BlogTitel"] %>">
-    <meta name="author" content="fliiiix">
-    
-    <link rel="stylesheet" type="text/css" href="/css/style.css">
-  </head>
 
-  <body class="<%= 'backgroundImage' if @loginPage%>">
-    <div class="pure-menu pure-menu-open pure-menu-horizontal pure-menu-fixed">
-      <a href="/" class="pure-menu-heading"><%= AppConfig["BlogTitel"] %></a>
-      <ul>
-          <li class="pure-menu-item <%= "pure-menu-selected" if !@aboutMenu %>"><a href="/">Home</a></li>
-          <li class="pure-menu-item <%= "pure-menu-selected" if @aboutMenu %>"><a href="/about">About</a></li>
-          <li class="pure-menu-item"><a href="/archiv">Archiv</a></li>
-          <%= '<li class="pure-menu-item"><a href="/social">Social</a></li>' if admin? %>
-      </ul>
+    <script src="/js/modernizr-2.6.2.js.download"></script>
+    <link href="/css/site.css" rel="stylesheet">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-127554791-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-127554791-1');
+    </script>
 
-      <ul class="pull-right login">
-        <% if admin? %>
-          <li><i class="icon-user"></i> Hi <%= AppConfig["User"] %></li>
-          <li><a href="/logout">Logout</a></li>
-        <% else %>
-          <li><a href="/login">Login</a></li>
-        <% end %>
-      </ul>
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-WBR6KCG');</script>
+    <!-- End Google Tag Manager -->
+</head>
+<body style="">
+   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WBR6KCG"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <div class="header">
+        <div class="navigation">
+            <div class="navigation-item">
+                <a class="<%= (@nav != nil && @nav == 'home' || @nav == nil) ? 'nav-selected' : 'nav-unselected'%>" href="/">Lucky Martin</a>
+            </div>
+            <div class="navigation-item">
+                <a class="<%= (@nav != nil && @nav == 'blog') ? 'nav-selected' : 'nav-unselected'%>" href="/blog">Blog</a>
+            </div>
+            <% seleced = (@nav != nil && @nav == "social") ? "nav-selected" : "nav-unselected" %>
+            <%= "<div class='navigation-item'><a class='#{seleced}' href='/social'>Social</a></div>" if admin? %>
+            <div class="quick-links">
+
+                <% if !AppConfig["Social"].empty? %>
+                    <% for account in AppConfig["Social"] %>
+                      <% s = Social.find(:key => account); if s != nil && s.url != "" && s.position == 1 %>
+                        <div class="icon">
+                            <a href="<%= s.url %>" target="_blank"><img src="/img/social/<%= account %>.png"></a>
+                        </div>
+                      <% end %>
+                    <% end %>
+                <% end %>
+                <div class="icon">
+                    <a href="/rss"><img src="/img/social/Rss.png"></a>
+                </div>
+              
+            </div>
+        </div>
     </div>
-
-    <div class="banner" <%= "style='display:none'" if @loginPage %>>
-        <h1 class="banner-head">
-           <%= AppConfig["BlogTitel"] %>
-        </h1>
-        <div class="pull-right" style="margin-top:230px; background-color:rgba(102, 102, 102, 0.5); padding:10px; margin-right:20px; color:black;">
-
-          <% if !AppConfig["Social"].blank? %>
-            <% for account in AppConfig["Social"] %>
-              <% s = Social.find_by_key(account); if s != nil && s.url != "" %>
-                <a href="<%= s.url %>" target="_blank"><img src="/img/social/<%= account %>.png"></a>
-              <% end %>
-            <% end %>
-          <% else %>  
-          <% end %>
-          <a href="/rss"><img src="/img/social/rss.png"></a>
+    
+    <div class="main">
+        <div class="content">
+            <%= yield %>
         </div>
     </div>
 
-    <div class="pure-g-r">
-      <div class="container pure-u-1">
-        <%= yield %>
-      </div>
+    <div class="footer">
+        <div class="inner-footer">
+            <% if !AppConfig["Social"].empty? %>
+                <table>
+                <% for account in AppConfig["Social"] %>
+                    <% s = Social.find(:key => account); if s != nil && s.url != "" && s.position == 0 %>
+                        <tr>
+                            <td>
+                                <div class="icon">
+                                    <img src="/img/social/<%= account %>.png">
+                                </div>
+                            </td>
+                            <td>
+                                <p><%= s.url %></p>
+                            </td>
+                        </tr>
+                    <% end %>
+                <% end %>
+                </table>
+            <% end %>
+        </div>
     </div>
-
+    
     <!-- Le javascript -->
     <script type="text/javascript" src="/js/main.min.js"></script>
     <script src="https://w.soundcloud.com/player/api.js" type="text/javascript"></script>
-
-    <%= erb :tracking %>
-  </body>
+</body>
 </html>
